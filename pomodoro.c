@@ -62,24 +62,27 @@ static gboolean pom_second(gpointer data)
   return (state->state != POM_STOPPED);
 }
 
-static void pom_button_pressed(GtkWidget* ebox, GdkEventButton* event, struct pom_state* state)
+static gboolean pom_button_pressed(GtkWidget* ebox, GdkEventButton* event, struct pom_state* state)
 {
-  switch (state->state) {
-    case POM_STOPPED:
-      state->state = POM_WORK;
-      state->seconds_left = WORK_SECONDS;
-      g_timeout_add(1000, pom_second, state);
-      break;
-    case POM_WORK:
-      state->state = POM_BREAK;
-      state->seconds_left = BREAK_SECONDS;
-      pom_notify("Pomodoro", "The current pomodoro was aborted.");
-      break;
-    case POM_BREAK:
-      state->state = POM_STOPPED;
-      break;
+  if (event->type == GDK_BUTTON_PRESS && event->button == 1) {
+    switch (state->state) {
+      case POM_STOPPED:
+        state->state = POM_WORK;
+        state->seconds_left = WORK_SECONDS;
+        g_timeout_add(1000, pom_second, state);
+        break;
+      case POM_WORK:
+        state->state = POM_BREAK;
+        state->seconds_left = BREAK_SECONDS;
+        pom_notify("Pomodoro", "The current pomodoro was aborted.");
+        break;
+      case POM_BREAK:
+        state->state = POM_STOPPED;
+        break;
+    }
   }
   pom_update_label(state);
+  return FALSE;
 }
 
 static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpointer data)
