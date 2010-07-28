@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include <panel-applet.h>
+#include <libnotify/notify.h>
 
 #include <string.h>
 
@@ -15,6 +16,13 @@ struct pom_state {
   } state;
   int seconds_left;
 };
+
+static void pom_notify(const gchar* summary, const gchar* body)
+{
+  NotifyNotification* note = notify_notification_new(summary, body, NULL, NULL);
+  notify_notification_show(note, NULL);
+  g_object_unref(note);
+}
 
 static void pom_update_label(struct pom_state* state)
 {
@@ -42,9 +50,11 @@ static gboolean pom_second(gpointer data)
       case POM_WORK:
         state->state = POM_BREAK;
         state->seconds_left = BREAK_SECONDS;
+        pom_notify("Pomodoro", "Break time!");
         break;
       case POM_BREAK:
         state->state = POM_STOPPED;
+        pom_notify("Pomodoro", "The break period is over.");
         break;
     }
   }
@@ -63,6 +73,7 @@ static void pom_button_pressed(GtkWidget* ebox, GdkEventButton* event, struct po
     case POM_WORK:
       state->state = POM_BREAK;
       state->seconds_left = BREAK_SECONDS;
+      pom_notify("Pomodoro", "The current pomodoro was aborted.");
       break;
     case POM_BREAK:
       state->state = POM_STOPPED;
@@ -79,6 +90,9 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
 
   if (strcmp(iid, "OAFIID:PomodoroApplet") != 0)
     return FALSE;
+
+  if (!notify_is_initted())
+    notify_init("Pomodoro");
 
   state = g_malloc0(sizeof(struct pom_state));
   state->label = gtk_label_new("Pomodoro");
