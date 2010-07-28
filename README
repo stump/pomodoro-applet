@@ -1,0 +1,8 @@
+timerexpired.ogg was generated with:
+
+  $ sox '|sox -n -p trim 0.0 0.4' \
+        '|sox -n -p synth tri 4500 fade 0.005 0.2' \
+        '|sox -n -p trim 0.0 0.08' \
+        '|sox -n -p synth tri 4500 fade 0.005 0.2' \
+        '|sox -n -p trim 0.0 0.4' \
+            timerexpired.ogg vol 0.5 repeat 1

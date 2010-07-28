@@ -6,4 +6,7 @@ pomodoro_applet_LDADD = @LIBPANELAPPLET_LIBS@ @LIBNOTIFY_LIBS@
 
 serverdir = $(libdir)/bonobo/servers
 server_DATA = PomodoroApplet.server
-EXTRA_DIST = PomodoroApplet.server
+
+pkgdata_DATA = timerexpired.ogg
+
+EXTRA_DIST = PomodoroApplet.server timerexpired.ogg
