@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.65])
-AC_INIT([pomodoro-applet], [0.0], [stump@jstump.com])
+AC_INIT([pomodoro-applet], [0.1], [stump@jstump.com])
 AC_CONFIG_SRCDIR([pomodoro.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE
