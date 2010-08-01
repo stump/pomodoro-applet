@@ -19,6 +19,12 @@ struct pom_state {
   GstElement* playbin;
 };
 
+static void pom_set_timer(struct pom_state* state, int new_state, int seconds)
+{
+  state->state = new_state;
+  state->seconds_left = seconds;
+}
+
 static void pom_notify(struct pom_state* state, const gchar* summary, const gchar* body, gboolean sound)
 {
   NotifyNotification* note = notify_notification_new(summary, body, NULL, NULL);
@@ -84,8 +90,7 @@ static gboolean pom_second(gpointer data)
   if (--state->seconds_left == 0) {
     switch (state->state) {
       case POM_WORK:
-        state->state = POM_BREAK;
-        state->seconds_left = BREAK_SECONDS;
+        pom_set_timer(state, POM_BREAK, BREAK_SECONDS);
         pom_notify(state, "Pomodoro", "Break time!", TRUE);
         break;
       case POM_BREAK:
@@ -107,13 +112,11 @@ static gboolean pom_button_pressed(GtkWidget* ebox, GdkEventButton* event, struc
   if (event->type == GDK_BUTTON_PRESS && event->button == 1) {
     switch (state->state) {
       case POM_STOPPED:
-        state->state = POM_WORK;
-        state->seconds_left = WORK_SECONDS;
+        pom_set_timer(state, POM_WORK, WORK_SECONDS);
         g_timeout_add(1000, pom_second, state);
         break;
       case POM_WORK:
-        state->state = POM_BREAK;
-        state->seconds_left = BREAK_SECONDS;
+        pom_set_timer(state, POM_BREAK, BREAK_SECONDS);
         pom_notify(state, "Pomodoro", "The current pomodoro was aborted.", FALSE);
         break;
       case POM_BREAK:
