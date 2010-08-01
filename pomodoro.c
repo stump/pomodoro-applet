@@ -15,14 +15,16 @@ struct pom_state {
     POM_WORK = 1,
     POM_BREAK = 2
   } state;
-  int seconds_left;
+  int seconds;
   GstElement* playbin;
+  GTimer* timer;
 };
 
 static void pom_set_timer(struct pom_state* state, int new_state, int seconds)
 {
   state->state = new_state;
-  state->seconds_left = seconds;
+  state->seconds = seconds;
+  g_timer_reset(state->timer);
 }
 
 static void pom_notify(struct pom_state* state, const gchar* summary, const gchar* body, gboolean sound)
@@ -69,15 +71,16 @@ static void pom_gst_message(GstBus* bus, GstMessage* msg, gpointer data)
 static void pom_update_label(struct pom_state* state)
 {
   gchar* new_text;
+  int seconds_left = state->seconds - g_timer_elapsed(state->timer, NULL);
   switch (state->state) {
     case POM_STOPPED:
       new_text = g_strdup("Pomodoro");
       break;
     case POM_WORK:
-      new_text = g_strdup_printf("Work: %02d:%02d", state->seconds_left / 60, state->seconds_left % 60);
+      new_text = g_strdup_printf("Work: %02d:%02d", seconds_left / 60, seconds_left % 60);
       break;
     case POM_BREAK:
-      new_text = g_strdup_printf("Break: %02d:%02d", state->seconds_left / 60, state->seconds_left % 60);
+      new_text = g_strdup_printf("Break: %02d:%02d", seconds_left / 60, seconds_left % 60);
       break;
   }
   gtk_label_set_text(GTK_LABEL(state->label), new_text);
@@ -87,7 +90,7 @@ static void pom_update_label(struct pom_state* state)
 static gboolean pom_second(gpointer data)
 {
   struct pom_state* state = data;
-  if (--state->seconds_left == 0) {
+  if (g_timer_elapsed(state->timer, NULL) >= state->seconds) {
     switch (state->state) {
       case POM_WORK:
         pom_set_timer(state, POM_BREAK, BREAK_SECONDS);
@@ -113,7 +116,7 @@ static gboolean pom_button_pressed(GtkWidget* ebox, GdkEventButton* event, struc
     switch (state->state) {
       case POM_STOPPED:
         pom_set_timer(state, POM_WORK, WORK_SECONDS);
-        g_timeout_add(1000, pom_second, state);
+        g_timeout_add(100, pom_second, state);
         break;
       case POM_WORK:
         pom_set_timer(state, POM_BREAK, BREAK_SECONDS);
@@ -156,6 +159,8 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
   bus = gst_element_get_bus(state->playbin);
   gst_bus_add_signal_watch(bus);
   g_signal_connect(G_OBJECT(bus), "message", G_CALLBACK(pom_gst_message), state);
+
+  state->timer = g_timer_new();
 
   return TRUE;
 }
