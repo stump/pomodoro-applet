@@ -10,6 +10,7 @@ AM_INIT_AUTOMAKE
 # Checks for programs.
 AC_PROG_CC
 AM_PROG_CC_C_O
+CFLAGS="$CFLAGS -W -Wall"
 
 # Checks for libraries.
 PKG_CHECK_MODULES([LIBPANELAPPLET], [libpanelapplet-2.0])
