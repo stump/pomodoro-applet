@@ -53,6 +53,8 @@ static void pom_gst_message(GstBus* bus, GstMessage* msg, gpointer data)
       g_error_free(err);
       g_free(debuginfo);
       break;
+    default:
+      break;
   }
 }
 
@@ -87,6 +89,8 @@ static gboolean pom_second(gpointer data)
       case POM_BREAK:
         state->state = POM_STOPPED;
         pom_notify(state, "Pomodoro", "The break period is over.", TRUE);
+        break;
+      case POM_STOPPED:
         break;
     }
   }
