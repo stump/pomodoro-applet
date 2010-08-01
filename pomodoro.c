@@ -41,6 +41,8 @@ static void pom_gst_message(GstBus* bus, GstMessage* msg, gpointer data)
   struct pom_state* state = data;
   GError* err = NULL;
   gchar* debuginfo = NULL;
+  (void) bus;
+
   switch (msg->type) {
     case GST_MESSAGE_EOS:
       gst_element_set_state(state->playbin, GST_STATE_NULL);
@@ -100,6 +102,8 @@ static gboolean pom_second(gpointer data)
 
 static gboolean pom_button_pressed(GtkWidget* ebox, GdkEventButton* event, struct pom_state* state)
 {
+  (void) ebox;
+
   if (event->type == GDK_BUTTON_PRESS && event->button == 1) {
     switch (state->state) {
       case POM_STOPPED:
