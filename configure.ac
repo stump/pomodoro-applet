@@ -9,6 +9,7 @@ AM_INIT_AUTOMAKE
 
 # Checks for programs.
 AC_PROG_CC
+AM_PROG_CC_C_O
 
 # Checks for libraries.
 PKG_CHECK_MODULES([LIBPANELAPPLET], [libpanelapplet-2.0])
