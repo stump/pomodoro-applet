@@ -1,3 +1,9 @@
+Version 0.3
+
+  * Moved the applet out of $PREFIX/bin and into
+    $PREFIX/lib/pomodoro-applet since the binary is not meant to be
+    invoked directly.
+
 Version 0.2
 
   * First unstable release.
