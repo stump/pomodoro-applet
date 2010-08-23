@@ -1,5 +1,6 @@
 *.o
 pomodoro-applet
+PomodoroApplet.server
 
 # Autotools-related stuff
 Makefile

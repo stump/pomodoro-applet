@@ -14,7 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-bin_PROGRAMS = pomodoro-applet
+appletdir = $(libdir)/pomodoro-applet
+applet_PROGRAMS = pomodoro-applet
 
 pomodoro_applet_SOURCES = pomodoro.c
 pomodoro_applet_CPPFLAGS = @LIBPANELAPPLET_CFLAGS@ @LIBNOTIFY_CFLAGS@ @GSTREAMER_CFLAGS@ -DPKGDATADIR='"$(pkgdatadir)"'
@@ -23,6 +24,10 @@ pomodoro_applet_LDADD = @LIBPANELAPPLET_LIBS@ @LIBNOTIFY_LIBS@ @GSTREAMER_LIBS@
 serverdir = $(libdir)/bonobo/servers
 server_DATA = PomodoroApplet.server
 
+PomodoroApplet.server : $(srcdir)/PomodoroApplet.server.in Makefile
+	$(AM_V_GEN)sed -e "s|\@APPLETDIR\@|$(appletdir)|" $< >$@
+
 pkgdata_DATA = timerexpired.ogg
 
-EXTRA_DIST = PomodoroApplet.server timerexpired.ogg
+EXTRA_DIST = PomodoroApplet.server.in timerexpired.ogg
+CLEANFILES = PomodoroApplet.server
