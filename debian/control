@@ -1,0 +1,16 @@
+Source: pomodoro-applet
+Section: gnome
+Priority: extra
+Maintainer: John Stumpo <stump@jstump.com>
+Build-Depends: debhelper (>= 7), autotools-dev, libpanel-applet2-dev, libnotify-dev, libgstreamer0.10-dev
+Standards-Version: 3.8.4
+
+Package: pomodoro-applet
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: GNOME Panel applet for a time management technique
+ This package provides a GNOME Panel applet for timing intervals for the
+ Pomodoro time management technique (essentially, 25 minutes of work, 5
+ minutes of break).  Clicking the applet starts a pomodoro or aborts
+ one in progress.  Each time a timer expires, a sound is played and a
+ libnotify notification is given.
