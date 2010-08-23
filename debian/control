@@ -3,7 +3,7 @@ Section: gnome
 Priority: extra
 Maintainer: John Stumpo <stump@jstump.com>
 Build-Depends: debhelper (>= 7), autotools-dev, libpanel-applet2-dev, libnotify-dev, libgstreamer0.10-dev
-Standards-Version: 3.8.4
+Standards-Version: 3.9.1
 
 Package: pomodoro-applet
 Architecture: any
