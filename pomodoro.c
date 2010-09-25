@@ -104,7 +104,7 @@ static void pom_update_label(struct pom_state* state)
   g_free(new_text);
 }
 
-static gboolean pom_second(gpointer data)
+static gboolean pom_update(gpointer data)
 {
   struct pom_state* state = data;
   if (g_timer_elapsed(state->timer, NULL) >= state->seconds) {
@@ -133,7 +133,7 @@ static gboolean pom_button_pressed(GtkWidget* ebox, GdkEventButton* event, struc
     switch (state->state) {
       case POM_STOPPED:
         pom_set_timer(state, POM_WORK, WORK_SECONDS);
-        g_timeout_add(100, pom_second, state);
+        g_timeout_add(100, pom_update, state);
         break;
       case POM_WORK:
         pom_set_timer(state, POM_BREAK, BREAK_SECONDS);
