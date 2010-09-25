@@ -37,6 +37,7 @@ struct pom_state {
   GTimer* timer;
 };
 
+/* Set the timer to a new state and time. */
 static void pom_set_timer(struct pom_state* state, int new_state, int seconds)
 {
   state->state = new_state;
@@ -46,10 +47,12 @@ static void pom_set_timer(struct pom_state* state, int new_state, int seconds)
 
 static void pom_notify(struct pom_state* state, const gchar* summary, const gchar* body, gboolean sound)
 {
+  /* Show the libnotify notification. */
   NotifyNotification* note = notify_notification_new(summary, body, NULL, NULL);
   notify_notification_show(note, NULL);
   g_object_unref(note);
 
+  /* Play the alarm tone if we need to. */
   if (sound) {
     gchar* alarm_tone_filename = g_build_filename(PKGDATADIR, "timerexpired.ogg", NULL);
     GFile* tonefile = g_file_new_for_path(alarm_tone_filename);
@@ -70,9 +73,12 @@ static void pom_gst_message(GstBus* bus, GstMessage* msg, gpointer data)
 
   switch (msg->type) {
     case GST_MESSAGE_EOS:
+      /* We reached the end of the file; reset the stream. */
       gst_element_set_state(state->playbin, GST_STATE_NULL);
       break;
+
     case GST_MESSAGE_ERROR:
+      /* Report an error playing the file. */
       gst_element_set_state(state->playbin, GST_STATE_NULL);
       gst_message_parse_error(msg, &err, &debuginfo);
       g_printerr("GStreamer error: %s\n", err->message);
@@ -80,11 +86,13 @@ static void pom_gst_message(GstBus* bus, GstMessage* msg, gpointer data)
       g_error_free(err);
       g_free(debuginfo);
       break;
+
     default:
       break;
   }
 }
 
+/* Set the applet text according to the current timer state. */
 static void pom_update_label(struct pom_state* state)
 {
   gchar* new_text;
@@ -108,15 +116,20 @@ static gboolean pom_update(gpointer data)
 {
   struct pom_state* state = data;
   if (g_timer_elapsed(state->timer, NULL) >= state->seconds) {
+    /* The current timer has expired. Advance to the next state. */
     switch (state->state) {
       case POM_WORK:
+        /* The work period is over; go into break mode. */
         pom_set_timer(state, POM_BREAK, BREAK_SECONDS);
         pom_notify(state, "Pomodoro", "Break time!", TRUE);
         break;
+
       case POM_BREAK:
+        /* The break period is over; go into idle mode. */
         state->state = POM_STOPPED;
         pom_notify(state, "Pomodoro", "The break period is over.", TRUE);
         break;
+
       case POM_STOPPED:
         break;
     }
@@ -163,6 +176,7 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
 
   gst_init(NULL, NULL);
 
+  /* Build the widget structure. */
   state = g_malloc0(sizeof(struct pom_state));
   state->label = gtk_label_new("Pomodoro");
   ebox = gtk_event_box_new();
@@ -172,6 +186,7 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
   g_signal_connect(G_OBJECT(ebox), "button-press-event", G_CALLBACK(pom_button_pressed), state);
   gtk_widget_show_all(GTK_WIDGET(applet));
 
+  /* Prepare GStreamer for playing the alarm tone. */
   state->playbin = gst_element_factory_make("playbin", NULL);
   bus = gst_element_get_bus(state->playbin);
   gst_bus_add_signal_watch(bus);
