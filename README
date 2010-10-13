@@ -18,3 +18,7 @@ timerexpired.ogg was generated with:
         '|sox -n -p synth tri 4500 fade 0.005 0.2' \
         '|sox -n -p trim 0.0 0.4' \
             timerexpired.ogg vol 0.5 repeat 1
+
+pomodoro.svg was obtained from:
+  http://jaanos.deviantart.com/art/Tomato-quot-Tango-quot-like-icon-94848835
+and is under the GNU GPL version 2 or later.
