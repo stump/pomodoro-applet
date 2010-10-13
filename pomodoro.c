@@ -15,6 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <gtk/gtk.h>
 #include <panel-applet.h>
 #include <libnotify/notify.h>
@@ -161,6 +165,42 @@ static gboolean pom_button_pressed(GtkWidget* ebox, GdkEventButton* event, struc
   return FALSE;
 }
 
+static void pom_about(BonoboUIComponent* component, gpointer data, const gchar* cname)
+{
+  const gchar* authors[] = {"John Stumpo", NULL};
+  gchar* logo_filename = g_build_filename(PIXMAPDIR, "pomodoro.svg", NULL);
+  GdkPixbuf* logo = gdk_pixbuf_new_from_file(logo_filename, NULL);
+  g_free(logo_filename);
+
+  (void) component;
+  (void) data;
+  (void) cname;
+
+  gtk_show_about_dialog(NULL,
+    "authors", authors,
+    "comments", "Timer for the Pomodoro Technique",
+    "copyright", "Copyright (C) 2010 John Stumpo",
+    "license", "GNU GPL version 3 or later",
+    "logo", logo,
+    "version", PACKAGE_VERSION,
+    NULL
+  );
+
+  g_object_unref(G_OBJECT(logo));
+}
+
+static const gchar* menu_xml =
+  "<popup name=\"button3\">\n"
+  "  <menuitem name=\"About Item\" verb=\"About\" _label=\"_About\"\n"
+  "            pixtype=\"stock\" pixname=\"gtk-about\" />\n"
+  "</popup>\n"
+;
+
+static const BonoboUIVerb menu_verbs[] = {
+  BONOBO_UI_VERB("About", pom_about),
+  BONOBO_UI_VERB_END
+};
+
 static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpointer data)
 {
   struct pom_state* state;
@@ -184,6 +224,8 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
   gtk_container_add(GTK_CONTAINER(applet), ebox);
 
   g_signal_connect(G_OBJECT(ebox), "button-press-event", G_CALLBACK(pom_button_pressed), state);
+
+  panel_applet_setup_menu(applet, menu_xml, menu_verbs, NULL);
   gtk_widget_show_all(GTK_WIDGET(applet));
 
   /* Prepare GStreamer for playing the alarm tone. */
