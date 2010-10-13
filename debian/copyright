@@ -4,7 +4,7 @@ This work was packaged for Debian by:
 
 It was downloaded from:
 
-    <http://ftp.jstump.com/pub/pomodoro-applet/pomodoro-applet-0.3.tar.gz>
+    <http://ftp.jstump.com/pub/pomodoro-applet/pomodoro-applet-0.4.tar.gz>
 
 Upstream Author(s):
 
@@ -31,6 +31,10 @@ License:
 
 On Debian systems, the complete text of the GNU General
 Public License version 3 can be found in `/usr/share/common-licenses/GPL-3'.
+
+pomodoro.svg is copyright (C) 2008 János Horváth and is under the GNU
+General Public License, version 2 or later. On Debian systems, the text of
+the GNU GPL version 2 can be found in `/usr/share/common-licenses/GPL-2'.
 
 The Debian packaging is:
 

@@ -1,3 +1,12 @@
+pomodoro-applet (0.4-1) unstable; urgency=low
+
+  * New upstream release.
+    - Added an icon to appear in the gnome-panel applet chooser.
+    - Added an "About" dialog so the context menu does not begin
+      with a separator with nothing above it.
+
+ -- John Stumpo <stump@jstump.com>  Wed, 13 Oct 2010 15:49:54 -0400
+
 pomodoro-applet (0.3-1) unstable; urgency=low
 
   * Initial release (Closes: #594126)
