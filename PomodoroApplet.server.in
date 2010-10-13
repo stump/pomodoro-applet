@@ -16,6 +16,6 @@
     </oaf_attribute>
     <oaf_attribute name="name" type="string" value="Pomodoro Applet" />
     <oaf_attribute name="description" type="string" value="Time the intervals used in the Pomodoro time management technique." />
-    <oaf_attribute name="panel:icon" type="string" value="gnome-applets.png" />
+    <oaf_attribute name="panel:icon" type="string" value="pomodoro.svg" />
   </oaf_server>
 </oaf_info>
