@@ -204,7 +204,6 @@ static const BonoboUIVerb menu_verbs[] = {
 static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpointer data)
 {
   struct pom_state* state;
-  GtkWidget* ebox;
   GstBus* bus;
   (void) data;
 
@@ -219,11 +218,9 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
   /* Build the widget structure. */
   state = g_malloc0(sizeof(struct pom_state));
   state->label = gtk_label_new("Pomodoro");
-  ebox = gtk_event_box_new();
-  gtk_container_add(GTK_CONTAINER(ebox), state->label);
-  gtk_container_add(GTK_CONTAINER(applet), ebox);
+  gtk_container_add(GTK_CONTAINER(applet), state->label);
 
-  g_signal_connect(G_OBJECT(ebox), "button-press-event", G_CALLBACK(pom_button_pressed), state);
+  g_signal_connect(G_OBJECT(applet), "button-press-event", G_CALLBACK(pom_button_pressed), state);
 
   panel_applet_setup_menu(applet, menu_xml, menu_verbs, NULL);
   gtk_widget_show_all(GTK_WIDGET(applet));
