@@ -1,3 +1,15 @@
+This is pomodoro-applet, a GNOME Panel applet implementing a simple timer
+for the Pomodoro Technique (http://www.pomodorotechnique.com/). You will
+need the development files for libnotify, gstreamer, and libpanel-applet
+to compile this.
+
+Releases are at:
+  http://ftp.jstump.com/pub/pomodoro-applet/
+
+There is a mailing list for discussion, patches, and announcements at:
+  https://www.jstump.com/mailman/listinfo/pomodoro-applet
+
+
 timerexpired.ogg was generated with:
 
   $ sox '|sox -n -p trim 0.0 0.4' \
