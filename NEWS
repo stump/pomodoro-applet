@@ -1,3 +1,9 @@
+Version 0.4
+
+  * Added an icon that will appear in the "Add to Panel" dialog.
+  * Added an about dialog so the context menu doesn't have a separator
+    with nothing above it and for better consistency with other applets.
+
 Version 0.3
 
   * Moved the applet out of $PREFIX/bin and into
