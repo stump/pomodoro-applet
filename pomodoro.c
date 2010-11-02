@@ -179,7 +179,7 @@ static void pom_about(BonoboUIComponent* component, gpointer data, const gchar* 
   gtk_show_about_dialog(NULL,
     "authors", authors,
     "comments", "Timer for the Pomodoro Technique",
-    "copyright", "Copyright (C) 2010 John Stumpo",
+    "copyright", "Copyright \xc2\xa9 2010 John Stumpo",
     "license", "GNU GPL version 3 or later",
     "logo", logo,
     "version", PACKAGE_VERSION,
