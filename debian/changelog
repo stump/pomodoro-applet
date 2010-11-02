@@ -1,3 +1,12 @@
+pomodoro-applet (0.4.1-1) unstable; urgency=low
+
+  * New upstream release.
+    - Made the applet expand along the minor axis of the panel,
+      eliminating non-clickable areas between the applet and the
+      screen edge. (Closes: #601740)
+
+ -- John Stumpo <stump@jstump.com>  Tue, 02 Nov 2010 16:20:31 -0400
+
 pomodoro-applet (0.4-1) unstable; urgency=low
 
   * New upstream release.
