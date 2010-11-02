@@ -1,3 +1,9 @@
+Version 0.4.1
+
+  * Made the applet expand along the panel's minor axis, eliminating
+    unclickable pixels between the applet and the panel edge.
+    (This is Debian bug #601740.)
+
 Version 0.4
 
   * Added an icon that will appear in the "Add to Panel" dialog.
