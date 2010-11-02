@@ -179,7 +179,7 @@ static void pom_about(BonoboUIComponent* component, gpointer data, const gchar* 
   gtk_show_about_dialog(NULL,
     "authors", authors,
     "comments", "Timer for the Pomodoro Technique",
-    "copyright", "Copyright (C) 2010 John Stumpo",
+    "copyright", "Copyright \xc2\xa9 2010 John Stumpo",
     "license", "GNU GPL version 3 or later",
     "logo", logo,
     "version", PACKAGE_VERSION,
@@ -223,6 +223,7 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
   g_signal_connect(G_OBJECT(applet), "button-press-event", G_CALLBACK(pom_button_pressed), state);
 
   panel_applet_setup_menu(applet, menu_xml, menu_verbs, NULL);
+  panel_applet_set_flags(applet, PANEL_APPLET_EXPAND_MINOR);
   gtk_widget_show_all(GTK_WIDGET(applet));
 
   /* Prepare GStreamer for playing the alarm tone. */
