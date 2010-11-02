@@ -223,6 +223,7 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
   g_signal_connect(G_OBJECT(applet), "button-press-event", G_CALLBACK(pom_button_pressed), state);
 
   panel_applet_setup_menu(applet, menu_xml, menu_verbs, NULL);
+  panel_applet_set_flags(applet, PANEL_APPLET_EXPAND_MINOR);
   gtk_widget_show_all(GTK_WIDGET(applet));
 
   /* Prepare GStreamer for playing the alarm tone. */
