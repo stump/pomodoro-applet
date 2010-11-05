@@ -111,6 +111,9 @@ static void pom_update_label(struct pom_state* state)
     case POM_BREAK:
       new_text = g_strdup_printf("Break: %02d:%02d", seconds_left / 60, seconds_left % 60);
       break;
+    default:
+      g_assert_not_reached();
+      break;
   }
   gtk_label_set_text(GTK_LABEL(state->label), new_text);
   g_free(new_text);
