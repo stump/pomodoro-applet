@@ -23,6 +23,7 @@
 #include <panel-applet.h>
 #include <libnotify/notify.h>
 #include <gst/gst.h>
+#include <librsvg/rsvg.h>
 
 #include <string.h>
 
@@ -39,6 +40,7 @@ struct pom_state {
   int seconds;
   GstElement* playbin;
   GTimer* timer;
+  RsvgHandle* tomato_svg;
 };
 
 /* Set the timer to a new state and time. */
@@ -171,9 +173,7 @@ static gboolean pom_button_pressed(GtkWidget* ebox, GdkEventButton* event, struc
 static void pom_about(BonoboUIComponent* component, gpointer data, const gchar* cname)
 {
   const gchar* authors[] = {"John Stumpo", NULL};
-  gchar* logo_filename = g_build_filename(PIXMAPDIR, "pomodoro.svg", NULL);
-  GdkPixbuf* logo = gdk_pixbuf_new_from_file(logo_filename, NULL);
-  g_free(logo_filename);
+  GdkPixbuf* logo = rsvg_handle_get_pixbuf(((struct pom_state*)data)->tomato_svg);
 
   (void) component;
   (void) data;
@@ -208,6 +208,7 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
 {
   struct pom_state* state;
   GstBus* bus;
+  gchar* logo_filename;
   (void) data;
 
   if (strcmp(iid, "OAFIID:PomodoroApplet") != 0)
@@ -225,9 +226,14 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
 
   g_signal_connect(G_OBJECT(applet), "button-press-event", G_CALLBACK(pom_button_pressed), state);
 
-  panel_applet_setup_menu(applet, menu_xml, menu_verbs, NULL);
+  panel_applet_setup_menu(applet, menu_xml, menu_verbs, state);
   panel_applet_set_flags(applet, PANEL_APPLET_EXPAND_MINOR);
   gtk_widget_show_all(GTK_WIDGET(applet));
+
+  /* Load the tomato icon for use in the about dialog. */
+  logo_filename = g_build_filename(PIXMAPDIR, "pomodoro.svg", NULL);
+  state->tomato_svg = rsvg_handle_new_from_file(logo_filename, NULL);
+  g_free(logo_filename);
 
   /* Prepare GStreamer for playing the alarm tone. */
   state->playbin = gst_element_factory_make("playbin", NULL);
