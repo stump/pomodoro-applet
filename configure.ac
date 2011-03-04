@@ -1,5 +1,5 @@
 # pomodoro-applet: timer for the Pomodoro Technique
-# Copyright (C) 2010 John Stumpo
+# Copyright (C) 2010-2011 John Stumpo
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

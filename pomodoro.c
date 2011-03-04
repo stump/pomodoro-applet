@@ -1,5 +1,5 @@
 /* pomodoro-applet: timer for the Pomodoro Technique
- * Copyright (C) 2010 John Stumpo
+ * Copyright (C) 2010-2011 John Stumpo
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -187,7 +187,7 @@ static void pom_about(BonoboUIComponent* component, gpointer data, const gchar* 
   gtk_show_about_dialog(NULL,
     "authors", authors,
     "comments", "Timer for the Pomodoro Technique",
-    "copyright", "Copyright \xc2\xa9 2010 John Stumpo",
+    "copyright", "Copyright \xc2\xa9 2010-2011 John Stumpo",
     "license", "GNU GPL version 3 or later",
     "logo", logo,
     "version", PACKAGE_VERSION,
