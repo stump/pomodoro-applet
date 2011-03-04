@@ -30,6 +30,11 @@
 #define WORK_SECONDS 25*60
 #define BREAK_SECONDS 5*60
 
+/* The stock applets hard-code 24x24 for images they load for this
+   purpose, so I don't feel bad doing it too.  */
+#define MINITOMATO_WIDTH 24
+#define MINITOMATO_HEIGHT 24
+
 struct pom_state {
   GtkWidget* label;
   enum {
@@ -209,6 +214,8 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
   struct pom_state* state;
   GstBus* bus;
   gchar* logo_filename;
+  GdkPixbuf* minitomato;
+  GtkWidget* hbox;
   (void) data;
 
   if (strcmp(iid, "OAFIID:PomodoroApplet") != 0)
@@ -222,18 +229,25 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
   /* Build the widget structure. */
   state = g_malloc0(sizeof(struct pom_state));
   state->label = gtk_label_new("Pomodoro");
-  gtk_container_add(GTK_CONTAINER(applet), state->label);
+  hbox = gtk_hbox_new(FALSE, 2);
+  gtk_container_add(GTK_CONTAINER(applet), hbox);
 
   g_signal_connect(G_OBJECT(applet), "button-press-event", G_CALLBACK(pom_button_pressed), state);
-
-  panel_applet_setup_menu(applet, menu_xml, menu_verbs, state);
-  panel_applet_set_flags(applet, PANEL_APPLET_EXPAND_MINOR);
-  gtk_widget_show_all(GTK_WIDGET(applet));
 
   /* Load the tomato icon for use in the about dialog. */
   logo_filename = g_build_filename(PIXMAPDIR, "pomodoro.svg", NULL);
   state->tomato_svg = rsvg_handle_new_from_file(logo_filename, NULL);
+  minitomato = rsvg_pixbuf_from_file_at_max_size(logo_filename, MINITOMATO_WIDTH, MINITOMATO_HEIGHT, NULL);
+  if (minitomato != NULL) {
+    gtk_box_pack_start(GTK_BOX(hbox), gtk_image_new_from_pixbuf(minitomato), FALSE, FALSE, 0);
+    g_object_unref(G_OBJECT(minitomato));
+  }
   g_free(logo_filename);
+
+  panel_applet_setup_menu(applet, menu_xml, menu_verbs, state);
+  panel_applet_set_flags(applet, PANEL_APPLET_EXPAND_MINOR);
+  gtk_box_pack_start(GTK_BOX(hbox), state->label, FALSE, FALSE, 0);
+  gtk_widget_show_all(GTK_WIDGET(applet));
 
   /* Prepare GStreamer for playing the alarm tone. */
   state->playbin = gst_element_factory_make("playbin", NULL);
