@@ -225,6 +225,7 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
     notify_init("Pomodoro");
 
   gst_init(NULL, NULL);
+  rsvg_init();
 
   /* Build the widget structure. */
   state = g_malloc0(sizeof(struct pom_state));
