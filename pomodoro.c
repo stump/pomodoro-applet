@@ -178,6 +178,7 @@ static gboolean pom_button_pressed(GtkWidget* ebox, GdkEventButton* event, struc
 static void pom_about(BonoboUIComponent* component, gpointer data, const gchar* cname)
 {
   const gchar* authors[] = {"John Stumpo", NULL};
+  const gchar* artists[] = {"J\xc3\xa1nos Horv\xc3\xa1th (icon)", NULL};
   GdkPixbuf* logo = rsvg_handle_get_pixbuf(((struct pom_state*)data)->tomato_svg);
 
   (void) component;
@@ -186,6 +187,7 @@ static void pom_about(BonoboUIComponent* component, gpointer data, const gchar* 
 
   gtk_show_about_dialog(NULL,
     "authors", authors,
+    "artists", artists,
     "comments", "Timer for the Pomodoro Technique",
     "copyright", "Copyright \xc2\xa9 2010-2011 John Stumpo",
     "license", "GNU GPL version 3 or later",
