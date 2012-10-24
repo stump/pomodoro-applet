@@ -1,5 +1,5 @@
 # pomodoro-applet: timer for the Pomodoro Technique
-# Copyright (C) 2010-2011 John Stumpo
+# Copyright (C) 2010-2012 John Stumpo
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,7 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-appletdir = $(libdir)/pomodoro-applet
+ACLOCAL_AMFLAGS = -I m4
+
+appletdir = $(APPLETDIR)
 applet_PROGRAMS = pomodoro-applet
 
 pixmapdir = $(datadir)/pixmaps
@@ -24,13 +26,9 @@ pomodoro_applet_SOURCES = pomodoro.c
 pomodoro_applet_CPPFLAGS = @LIBPANELAPPLET_CFLAGS@ @LIBNOTIFY_CFLAGS@ @GSTREAMER_CFLAGS@ @LIBRSVG_CFLAGS@ -DPKGDATADIR='"$(pkgdatadir)"' -DPIXMAPDIR='"$(pixmapdir)"'
 pomodoro_applet_LDADD = @LIBPANELAPPLET_LIBS@ @LIBNOTIFY_LIBS@ @GSTREAMER_LIBS@ @LIBRSVG_LIBS@
 
-serverdir = $(libdir)/bonobo/servers
-server_DATA = PomodoroApplet.server
-
-PomodoroApplet.server : $(srcdir)/PomodoroApplet.server.in Makefile
-	$(AM_V_GEN)sed -e "s|\@APPLETDIR\@|$(appletdir)|" $< >$@
+panelappletdir = $(PANELAPPLETDIR)
+panelapplet_DATA = com.jstump.PomodoroApplet.panel-applet
 
 pkgdata_DATA = timerexpired.ogg
 
-EXTRA_DIST = PomodoroApplet.server.in timerexpired.ogg pomodoro.svg
-CLEANFILES = PomodoroApplet.server
+EXTRA_DIST = timerexpired.ogg pomodoro.svg

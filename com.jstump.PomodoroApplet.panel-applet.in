@@ -1,0 +1,11 @@
+[Applet Factory]
+Id=PomodoroAppletFactory
+Location=@APPLETDIR@/pomodoro-applet
+Name=Pomodoro Applet Factory
+Description=Pomodoro Applet factory
+
+[PomodoroApplet]
+Name=Pomodoro Applet
+Description=Time the intervals used in the Pomodoro time management technique.
+Icon=pomodoro.svg
+BonoboId=OAFIID:PomodoroApplet

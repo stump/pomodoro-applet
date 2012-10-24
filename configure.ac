@@ -19,6 +19,7 @@ AC_INIT([pomodoro-applet], [0.5], [stump@jstump.com])
 AC_CONFIG_SRCDIR([pomodoro.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE
+AC_CONFIG_MACRO_DIR([m4])
 
 # Checks for programs.
 AC_PROG_CC
@@ -46,5 +47,13 @@ AC_CHECK_HEADERS([string.h])
 
 # Checks for library functions.
 
-AC_CONFIG_FILES([Makefile])
+# Set some extra paths.
+AS_AC_EXPAND([APPLETDIR], ["${libdir}/pomodoro-applet"])
+AC_SUBST([APPLETDIR])
+AC_MSG_CHECKING([where panel-applet files go])
+AS_AC_EXPAND([PANELAPPLETDIR], ["`${PKG_CONFIG} --variable=libpanel_applet_dir libpanelapplet-4.0`"])
+AC_SUBST([PANELAPPLETDIR])
+AC_MSG_RESULT([$PANELAPPLETDIR])
+
+AC_CONFIG_FILES([Makefile com.jstump.PomodoroApplet.panel-applet])
 AC_OUTPUT
