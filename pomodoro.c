@@ -61,11 +61,7 @@ static void pom_notify(struct pom_state* state, const gchar* summary, const gcha
 {
   /* Show the libnotify notification. */
   NotifyNotification* note;
-#if !defined(NOTIFY_VERSION_MAJOR) || (NOTIFY_VERSION_MAJOR == 0 && NOTIFY_VERSION_MINOR < 7)
-  note = notify_notification_new(summary, body, NULL, NULL);
-#else
   note = notify_notification_new(summary, body, NULL);
-#endif
   notify_notification_show(note, NULL);
   g_object_unref(note);
 
