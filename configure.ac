@@ -18,7 +18,7 @@ AC_PREREQ([2.65])
 AC_INIT([pomodoro-applet], [0.5], [stump@jstump.com])
 AC_CONFIG_SRCDIR([pomodoro.c])
 AC_CONFIG_HEADERS([config.h])
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([1.11 foreign])
 AC_CONFIG_MACRO_DIR([m4])
 
 # Checks for programs.

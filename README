@@ -3,6 +3,8 @@ for the Pomodoro Technique (http://www.pomodorotechnique.com/). You will
 need the development files for libnotify, gstreamer, libpanel-applet,
 and librsvg to compile this.
 
+The main author is John Stumpo <stump@jstump.com>.
+
 Releases are at:
   http://ftp.jstump.com/pub/pomodoro-applet/
 
