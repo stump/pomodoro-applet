@@ -1,5 +1,5 @@
 # pomodoro-applet: timer for the Pomodoro Technique
-# Copyright (C) 2010-2011 John Stumpo
+# Copyright (C) 2010-2012 John Stumpo
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ AM_PROG_CC_C_O
 CFLAGS="$CFLAGS -W -Wall"
 
 # Checks for libraries.
-PKG_CHECK_MODULES([LIBPANELAPPLET], [libpanelapplet-2.0])
+PKG_CHECK_MODULES([LIBPANELAPPLET], [libpanelapplet-4.0])
 AC_SUBST([LIBPANELAPPLET_CFLAGS])
 AC_SUBST([LIBPANELAPPLET_LIBS])
 PKG_CHECK_MODULES([LIBNOTIFY], [libnotify])

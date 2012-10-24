@@ -1,5 +1,5 @@
 /* pomodoro-applet: timer for the Pomodoro Technique
- * Copyright (C) 2010-2011 John Stumpo
+ * Copyright (C) 2010-2012 John Stumpo
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -180,21 +180,20 @@ static gboolean pom_button_pressed(GtkWidget* ebox, GdkEventButton* event, struc
   return FALSE;
 }
 
-static void pom_about(BonoboUIComponent* component, gpointer data, const gchar* cname)
+static void pom_about(GtkAction* action, gpointer data)
 {
   const gchar* authors[] = {"John Stumpo", NULL};
   const gchar* artists[] = {"J\xc3\xa1nos Horv\xc3\xa1th (icon)", NULL};
   GdkPixbuf* logo = rsvg_handle_get_pixbuf(((struct pom_state*)data)->tomato_svg);
 
-  (void) component;
+  (void) action;
   (void) data;
-  (void) cname;
 
   gtk_show_about_dialog(NULL,
     "authors", authors,
     "artists", artists,
     "comments", "Timer for the Pomodoro Technique",
-    "copyright", "Copyright \xc2\xa9 2010-2011 John Stumpo",
+    "copyright", "Copyright \xc2\xa9 2010-2012 John Stumpo",
     "license", "GNU GPL version 3 or later",
     "logo", logo,
     "version", PACKAGE_VERSION,
@@ -205,15 +204,11 @@ static void pom_about(BonoboUIComponent* component, gpointer data, const gchar* 
 }
 
 static const gchar* menu_xml =
-  "<popup name=\"button3\">\n"
-  "  <menuitem name=\"About Item\" verb=\"About\" _label=\"_About\"\n"
-  "            pixtype=\"stock\" pixname=\"gtk-about\" />\n"
-  "</popup>\n"
+  "<menuitem name=\"About\" action=\"About\" />"
 ;
 
-static const BonoboUIVerb menu_verbs[] = {
-  BONOBO_UI_VERB("About", pom_about),
-  BONOBO_UI_VERB_END
+static const GtkActionEntry menu_actions[] = {
+  {"About", GTK_STOCK_ABOUT, "_About", NULL, NULL, G_CALLBACK(pom_about)},
 };
 
 static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpointer data)
@@ -223,9 +218,10 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
   gchar* logo_filename;
   GdkPixbuf* minitomato;
   GtkWidget* hbox;
+  GtkActionGroup* action_group;
   (void) data;
 
-  if (strcmp(iid, "OAFIID:PomodoroApplet") != 0)
+  if (strcmp(iid, "PomodoroApplet") != 0)
     return FALSE;
 
   if (!notify_is_initted())
@@ -252,7 +248,11 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
   }
   g_free(logo_filename);
 
-  panel_applet_setup_menu(applet, menu_xml, menu_verbs, state);
+  /* Set up the action group and menu. */
+  action_group = gtk_action_group_new("Pomodoro Applet Actions");
+  gtk_action_group_add_actions(action_group, menu_actions, G_N_ELEMENTS(menu_actions), state);
+  panel_applet_setup_menu(applet, menu_xml, action_group);
+  g_object_unref(action_group);
   panel_applet_set_flags(applet, PANEL_APPLET_EXPAND_MINOR);
   gtk_box_pack_start(GTK_BOX(hbox), state->label, FALSE, FALSE, 0);
   gtk_widget_show_all(GTK_WIDGET(applet));
@@ -268,4 +268,4 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
   return TRUE;
 }
 
-PANEL_APPLET_BONOBO_FACTORY("OAFIID:PomodoroApplet_Factory", PANEL_TYPE_APPLET, "PomodoroApplet", "0", pomodoro_applet_fill, NULL);
+PANEL_APPLET_OUT_PROCESS_FACTORY("PomodoroAppletFactory", PANEL_TYPE_APPLET, pomodoro_applet_fill, NULL);
