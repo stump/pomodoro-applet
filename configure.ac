@@ -40,6 +40,13 @@ PKG_CHECK_MODULES([LIBRSVG], [librsvg-2.0 >= 2.36])
 AC_SUBST([LIBRSVG_CFLAGS])
 AC_SUBST([LIBRSVG_LIBS])
 
+# i18n stuff
+IT_PROG_INTLTOOL
+GETTEXT_PACKAGE=pomodoro-applet
+AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"], [The gettext domain name])
+AC_SUBST([GETTEXT_PACKAGE])
+AM_GLIB_GNU_GETTEXT
+
 # Checks for header files.
 AC_CHECK_HEADERS([string.h])
 
@@ -59,5 +66,5 @@ AS_AC_EXPAND([SERVICEDIR], ["`${PKG_CONFIG} --variable=session_bus_services_dir 
 AC_SUBST([SERVICEDIR])
 AC_MSG_RESULT([$SERVICEDIR])
 
-AC_CONFIG_FILES([Makefile com.jstump.PomodoroApplet.panel-applet org.gnome.panel.applet.PomodoroAppletFactory.service])
+AC_CONFIG_FILES([Makefile com.jstump.PomodoroApplet.panel-applet org.gnome.panel.applet.PomodoroAppletFactory.service po/Makefile.in])
 AC_OUTPUT

@@ -2,10 +2,14 @@
 pomodoro-applet
 com.jstump.PomodoroApplet.panel-applet
 org.gnome.panel.applet.PomodoroAppletFactory.service
+*.pot
+*.mo
+*.gmo
 
-# Autotools-related stuff
+# Autotools/intltool-related stuff
 Makefile
 Makefile.in
+Makefile.in.in
 aclocal.m4
 autom4te.cache
 config.h*
@@ -14,7 +18,10 @@ config.status
 configure
 depcomp
 install-sh
+.intltool-merge-cache
+m4/intltool.m4
 missing
-stamp-h1
+POTFILES
+stamp-*
 .deps
 compile

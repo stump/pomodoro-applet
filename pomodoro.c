@@ -270,6 +270,7 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
 
   /* Set up the action group and menu. */
   action_group = gtk_action_group_new("Pomodoro Applet Actions");
+  gtk_action_group_set_translation_domain(action_group, GETTEXT_PACKAGE);
   gtk_action_group_add_actions(action_group, menu_actions, G_N_ELEMENTS(menu_actions), state);
   panel_applet_setup_menu(applet, menu_xml, action_group);
   g_object_unref(action_group);
