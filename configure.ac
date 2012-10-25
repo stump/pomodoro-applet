@@ -54,6 +54,10 @@ AC_MSG_CHECKING([where panel-applet files go])
 AS_AC_EXPAND([PANELAPPLETDIR], ["`${PKG_CONFIG} --variable=libpanel_applet_dir libpanelapplet-4.0`"])
 AC_SUBST([PANELAPPLETDIR])
 AC_MSG_RESULT([$PANELAPPLETDIR])
+AC_MSG_CHECKING([where dbus service files go])
+AS_AC_EXPAND([SERVICEDIR], ["`${PKG_CONFIG} --variable=session_bus_services_dir dbus-1`"])
+AC_SUBST([SERVICEDIR])
+AC_MSG_RESULT([$SERVICEDIR])
 
-AC_CONFIG_FILES([Makefile com.jstump.PomodoroApplet.panel-applet])
+AC_CONFIG_FILES([Makefile com.jstump.PomodoroApplet.panel-applet org.gnome.panel.applet.PomodoroAppletFactory.service])
 AC_OUTPUT

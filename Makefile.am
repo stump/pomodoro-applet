@@ -29,6 +29,9 @@ pomodoro_applet_LDADD = @LIBPANELAPPLET_LIBS@ @LIBNOTIFY_LIBS@ @GSTREAMER_LIBS@ 
 panelappletdir = $(PANELAPPLETDIR)
 panelapplet_DATA = com.jstump.PomodoroApplet.panel-applet
 
+servicedir = $(SERVICEDIR)
+service_DATA = org.gnome.panel.applet.PomodoroAppletFactory.service
+
 pkgdata_DATA = timerexpired.ogg
 
 EXTRA_DIST = timerexpired.ogg pomodoro.svg

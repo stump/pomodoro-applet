@@ -1,6 +1,7 @@
 *.o
 pomodoro-applet
 com.jstump.PomodoroApplet.panel-applet
+org.gnome.panel.applet.PomodoroAppletFactory.service
 
 # Autotools-related stuff
 Makefile
