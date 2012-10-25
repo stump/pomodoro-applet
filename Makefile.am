@@ -35,4 +35,4 @@ service_DATA = org.gnome.panel.applet.PomodoroAppletFactory.service
 
 pkgdata_DATA = timerexpired.ogg
 
-EXTRA_DIST = timerexpired.ogg pomodoro.svg
+EXTRA_DIST = timerexpired.ogg pomodoro.svg autogen.sh
