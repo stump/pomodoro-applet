@@ -25,6 +25,7 @@
 #include <gst/gst.h>
 #include <librsvg/rsvg.h>
 #include <librsvg/rsvg-cairo.h>
+#include <glib/gi18n.h>
 
 #include <string.h>
 
@@ -112,13 +113,13 @@ static void pom_update_label(struct pom_state* state)
   int seconds_left = state->seconds - g_timer_elapsed(state->timer, NULL);
   switch (state->state) {
     case POM_STOPPED:
-      new_text = g_strdup("Pomodoro");
+      new_text = g_strdup(_("Pomodoro"));
       break;
     case POM_WORK:
-      new_text = g_strdup_printf("Work: %02d:%02d", seconds_left / 60, seconds_left % 60);
+      new_text = g_strdup_printf(_("Work: %02d:%02d"), seconds_left / 60, seconds_left % 60);
       break;
     case POM_BREAK:
-      new_text = g_strdup_printf("Break: %02d:%02d", seconds_left / 60, seconds_left % 60);
+      new_text = g_strdup_printf(_("Break: %02d:%02d"), seconds_left / 60, seconds_left % 60);
       break;
     default:
       g_assert_not_reached();
@@ -137,13 +138,13 @@ static gboolean pom_update(gpointer data)
       case POM_WORK:
         /* The work period is over; go into break mode. */
         pom_set_timer(state, POM_BREAK, BREAK_SECONDS);
-        pom_notify(state, "Pomodoro", "Break time!", TRUE);
+        pom_notify(state, _("Pomodoro"), _("Break time!"), TRUE);
         break;
 
       case POM_BREAK:
         /* The break period is over; go into idle mode. */
         state->state = POM_STOPPED;
-        pom_notify(state, "Pomodoro", "The break period is over.", TRUE);
+        pom_notify(state, _("Pomodoro"), _("The break period is over."), TRUE);
         break;
 
       case POM_STOPPED:
@@ -166,7 +167,7 @@ static gboolean pom_button_pressed(GtkWidget* ebox, GdkEventButton* event, struc
         break;
       case POM_WORK:
         pom_set_timer(state, POM_BREAK, BREAK_SECONDS);
-        pom_notify(state, "Pomodoro", "The current pomodoro was aborted.", FALSE);
+        pom_notify(state, _("Pomodoro"), _("The current pomodoro was aborted."), FALSE);
         break;
       case POM_BREAK:
         state->state = POM_STOPPED;
@@ -189,7 +190,7 @@ static void pom_about(GtkAction* action, gpointer data)
   gtk_show_about_dialog(NULL,
     "authors", authors,
     "artists", artists,
-    "comments", "Timer for the Pomodoro Technique",
+    "comments", _("Timer for the Pomodoro Technique"),
     "copyright", "Copyright \xc2\xa9 2010-2012 John Stumpo",
     "license", "GNU GPL version 3 or later",
     "logo", logo,
@@ -205,7 +206,7 @@ static const gchar* menu_xml =
 ;
 
 static const GtkActionEntry menu_actions[] = {
-  {"About", GTK_STOCK_ABOUT, "_About", NULL, NULL, G_CALLBACK(pom_about)},
+  {"About", GTK_STOCK_ABOUT, N_("_About"), NULL, NULL, G_CALLBACK(pom_about)},
 };
 
 static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpointer data)
@@ -228,7 +229,7 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
 
   /* Build the widget structure. */
   state = g_malloc0(sizeof(struct pom_state));
-  state->label = gtk_label_new("Pomodoro");
+  state->label = gtk_label_new(_("Pomodoro"));
   hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
   gtk_container_add(GTK_CONTAINER(applet), hbox);
 
