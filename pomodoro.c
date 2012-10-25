@@ -233,7 +233,7 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
   /* Build the widget structure. */
   state = g_malloc0(sizeof(struct pom_state));
   state->label = gtk_label_new("Pomodoro");
-  hbox = gtk_hbox_new(FALSE, 2);
+  hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
   gtk_container_add(GTK_CONTAINER(applet), hbox);
 
   g_signal_connect(G_OBJECT(applet), "button-press-event", G_CALLBACK(pom_button_pressed), state);
