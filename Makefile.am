@@ -30,9 +30,14 @@ pomodoro_applet_LDADD = @LIBPANELAPPLET_LIBS@ @LIBNOTIFY_LIBS@ @GSTREAMER_LIBS@ 
 panelappletdir = $(PANELAPPLETDIR)
 panelapplet_DATA = com.jstump.PomodoroApplet.panel-applet
 
+# Adapted from similar rules in intltool.m4; hopefully it'll get
+# included in intltool itself soon enough...
+%.panel-applet:   %.panel-applet.in   $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; $(INTLTOOL_V_MERGE)LC_ALL=C $(INTLTOOL_MERGE) $(INTLTOOL_V_MERGE_OPTIONS) -d -u -c $(top_builddir)/po/.intltool-merge-cache $(top_srcdir)/po $< $@
+
 servicedir = $(SERVICEDIR)
 service_DATA = org.gnome.panel.applet.PomodoroAppletFactory.service
 
 pkgdata_DATA = timerexpired.ogg
 
 EXTRA_DIST = timerexpired.ogg pomodoro.svg autogen.sh
+CLEANFILES = com.jstump.PomodoroApplet.panel-applet

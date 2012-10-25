@@ -5,7 +5,7 @@ Name=Pomodoro Applet Factory
 Description=Pomodoro Applet factory
 
 [PomodoroApplet]
-Name=Pomodoro Applet
-Description=Time the intervals used in the Pomodoro time management technique.
+_Name=Pomodoro Applet
+_Description=Time the intervals used in the Pomodoro time management technique.
 Icon=pomodoro
 BonoboId=OAFIID:PomodoroApplet
