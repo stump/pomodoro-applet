@@ -16,7 +16,7 @@
 
 AC_PREREQ([2.65])
 AC_INIT([pomodoro-applet], [0.9], [stump@jstump.com])
-AC_CONFIG_SRCDIR([pomodoro.c])
+AC_CONFIG_SRCDIR([src/pomodoro.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([1.11 foreign])
 AC_CONFIG_MACRO_DIR([m4])
@@ -66,5 +66,9 @@ AS_AC_EXPAND([SERVICEDIR], ["`${PKG_CONFIG} --variable=session_bus_services_dir 
 AC_SUBST([SERVICEDIR])
 AC_MSG_RESULT([$SERVICEDIR])
 
-AC_CONFIG_FILES([Makefile com.jstump.PomodoroApplet.panel-applet.in org.gnome.panel.applet.PomodoroAppletFactory.service po/Makefile.in])
+AC_CONFIG_FILES([Makefile
+                 po/Makefile.in
+                 src/Makefile
+                 src/com.jstump.PomodoroApplet.panel-applet.in
+                 src/org.gnome.panel.applet.PomodoroAppletFactory.service])
 AC_OUTPUT

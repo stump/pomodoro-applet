@@ -1,2 +1,2 @@
-pomodoro.c
-[type: gettext/ini]com.jstump.PomodoroApplet.panel-applet.in.in
+src/pomodoro.c
+[type: gettext/ini]src/com.jstump.PomodoroApplet.panel-applet.in.in
