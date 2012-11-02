@@ -1,3 +1,8 @@
+Version 1.0
+
+  * Applet has i18n support (no translations yet though).
+  * Make the icon appear again in the applet selector (0.9 broke that).
+
 Version 0.9
 
   * Applet has been ported to GNOME 3.
