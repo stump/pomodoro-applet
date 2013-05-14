@@ -21,10 +21,10 @@ pixmapdir = $(datadir)/pixmaps
 pixmap_DATA = pomodoro.svg
 
 pomodoro_applet_SOURCES = pomodoro.c
-pomodoro_applet_CPPFLAGS = @LIBPANELAPPLET_CFLAGS@ @LIBNOTIFY_CFLAGS@ @GSTREAMER_CFLAGS@ @LIBRSVG_CFLAGS@ -DPKGDATADIR='"$(pkgdatadir)"' -DPIXMAPDIR='"$(pixmapdir)"' -DGNOMELOCALEDIR='"$(localedir)"'
-pomodoro_applet_LDADD = @LIBPANELAPPLET_LIBS@ @LIBNOTIFY_LIBS@ @GSTREAMER_LIBS@ @LIBRSVG_LIBS@
+pomodoro_applet_CPPFLAGS = @LIBMATEPANELAPPLET_CFLAGS@ @LIBNOTIFY_CFLAGS@ @GSTREAMER_CFLAGS@ @LIBRSVG_CFLAGS@ -DPKGDATADIR='"$(pkgdatadir)"' -DPIXMAPDIR='"$(pixmapdir)"' -DMATELOCALEDIR='"$(localedir)"'
+pomodoro_applet_LDADD = @LIBMATEPANELAPPLET_LIBS@ @LIBNOTIFY_LIBS@ @GSTREAMER_LIBS@ @LIBRSVG_LIBS@
 
-panelappletdir = $(PANELAPPLETDIR)
+panelappletdir = $(MATEPANELAPPLETDIR)
 panelapplet_DATA = com.jstump.PomodoroApplet.panel-applet
 
 # Adapted from similar rules in intltool.m4; hopefully it'll get
