@@ -20,11 +20,10 @@
 #endif
 
 #include <gtk/gtk.h>
-#include <panel-applet.h>
+#include <mate-panel-applet.h>
 #include <libnotify/notify.h>
 #include <gst/gst.h>
 #include <librsvg/rsvg.h>
-#include <librsvg/rsvg-cairo.h>
 #include <glib/gi18n.h>
 
 #include <string.h>
@@ -209,7 +208,7 @@ static const GtkActionEntry menu_actions[] = {
   {"About", GTK_STOCK_ABOUT, N_("_About"), NULL, NULL, G_CALLBACK(pom_about)},
 };
 
-static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpointer data)
+static gboolean pomodoro_applet_fill(MatePanelApplet* applet, const gchar* iid, gpointer data)
 {
   struct pom_state* state;
   GstBus* bus;
@@ -226,11 +225,12 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
     notify_init("Pomodoro");
 
   gst_init(NULL, NULL);
+  rsvg_init();
 
   /* Build the widget structure. */
   state = g_malloc0(sizeof(struct pom_state));
   state->label = gtk_label_new(_("Pomodoro"));
-  hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
+  hbox = gtk_hbox_new(FALSE, 2);
   gtk_container_add(GTK_CONTAINER(applet), hbox);
 
   g_signal_connect(G_OBJECT(applet), "button-press-event", G_CALLBACK(pom_button_pressed), state);
@@ -238,33 +238,10 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
   /* Load the tomato icon for use in the about dialog. */
   logo_filename = g_build_filename(PIXMAPDIR, "pomodoro.svg", NULL);
   state->tomato_svg = rsvg_handle_new_from_file(logo_filename, NULL);
-  if (state->tomato_svg != NULL) {
-    RsvgDimensionData dims;
-    int orig_width, orig_height;
-    cairo_surface_t* surface;
-    cairo_t* cr;
-
-    rsvg_handle_get_dimensions(state->tomato_svg, &dims);
-    orig_width = dims.width;
-    orig_height = dims.height;
-    if (dims.width > MINITOMATO_WIDTH) {
-      dims.height = (dims.height * MINITOMATO_WIDTH) / dims.width;
-      dims.width = MINITOMATO_WIDTH;
-    }
-    if (dims.height > MINITOMATO_HEIGHT) {
-      dims.width = (dims.width * MINITOMATO_HEIGHT) / dims.height;
-      dims.height = MINITOMATO_HEIGHT;
-    }
-
-    surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, dims.width, dims.height);
-    cr = cairo_create(surface);
-    cairo_scale(cr, dims.width/(double)orig_width, dims.height/(double)orig_height);
-    rsvg_handle_render_cairo(state->tomato_svg, cr);
-    cairo_destroy(cr);
-    minitomato = gdk_pixbuf_get_from_surface(surface, 0, 0, dims.width, dims.height);
+  minitomato = rsvg_pixbuf_from_file_at_max_size(logo_filename, MINITOMATO_WIDTH, MINITOMATO_HEIGHT, NULL);
+  if (minitomato != NULL) {
     gtk_box_pack_start(GTK_BOX(hbox), gtk_image_new_from_pixbuf(minitomato), FALSE, FALSE, 0);
-    g_object_unref(minitomato);
-    cairo_surface_destroy(surface);
+    g_object_unref(G_OBJECT(minitomato));
   }
   g_free(logo_filename);
 
@@ -272,9 +249,9 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
   action_group = gtk_action_group_new("Pomodoro Applet Actions");
   gtk_action_group_set_translation_domain(action_group, GETTEXT_PACKAGE);
   gtk_action_group_add_actions(action_group, menu_actions, G_N_ELEMENTS(menu_actions), state);
-  panel_applet_setup_menu(applet, menu_xml, action_group);
+  mate_panel_applet_setup_menu(applet, menu_xml, action_group);
   g_object_unref(action_group);
-  panel_applet_set_flags(applet, PANEL_APPLET_EXPAND_MINOR);
+  mate_panel_applet_set_flags(applet, MATE_PANEL_APPLET_EXPAND_MINOR);
   gtk_box_pack_start(GTK_BOX(hbox), state->label, FALSE, FALSE, 0);
   gtk_widget_show_all(GTK_WIDGET(applet));
 
@@ -289,4 +266,4 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
   return TRUE;
 }
 
-PANEL_APPLET_OUT_PROCESS_FACTORY("PomodoroAppletFactory", PANEL_TYPE_APPLET, pomodoro_applet_fill, NULL);
+MATE_PANEL_APPLET_OUT_PROCESS_FACTORY("PomodoroAppletFactory", PANEL_TYPE_APPLET, "", pomodoro_applet_fill, NULL);
