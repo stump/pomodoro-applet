@@ -69,6 +69,6 @@ AC_MSG_RESULT([$SERVICEDIR])
 AC_CONFIG_FILES([Makefile
                  po/Makefile.in
                  src/Makefile
-                 src/com.jstump.PomodoroApplet.panel-applet.in
+                 src/io.stump.PomodoroApplet.panel-applet.in
                  src/org.gnome.panel.applet.PomodoroAppletFactory.service])
 AC_OUTPUT

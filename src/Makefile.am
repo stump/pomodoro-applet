@@ -25,7 +25,7 @@ pomodoro_applet_CPPFLAGS = @LIBPANELAPPLET_CFLAGS@ @LIBNOTIFY_CFLAGS@ @LIBCANBER
 pomodoro_applet_LDADD = @LIBPANELAPPLET_LIBS@ @LIBNOTIFY_LIBS@ @LIBCANBERRA_GTK_LIBS@ @LIBRSVG_LIBS@
 
 panelappletdir = $(PANELAPPLETDIR)
-panelapplet_DATA = com.jstump.PomodoroApplet.panel-applet
+panelapplet_DATA = io.stump.PomodoroApplet.panel-applet
 
 # Adapted from similar rules in intltool.m4; hopefully it'll get
 # included in intltool itself soon enough...
@@ -37,4 +37,4 @@ service_DATA = org.gnome.panel.applet.PomodoroAppletFactory.service
 pkgdata_DATA = timerexpired.ogg
 
 EXTRA_DIST = timerexpired.ogg pomodoro.svg
-CLEANFILES = com.jstump.PomodoroApplet.panel-applet
+CLEANFILES = io.stump.PomodoroApplet.panel-applet
