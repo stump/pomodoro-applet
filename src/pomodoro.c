@@ -1,5 +1,5 @@
 /* pomodoro-applet: timer for the Pomodoro Technique
- * Copyright (C) 2010-2012 John Stumpo
+ * Copyright (C) 2010-2012, 2014 John Stumpo
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 #include <gtk/gtk.h>
 #include <panel-applet.h>
 #include <libnotify/notify.h>
-#include <gst/gst.h>
+#include <canberra-gtk.h>
 #include <librsvg/rsvg.h>
 #include <librsvg/rsvg-cairo.h>
 #include <glib/gi18n.h>
@@ -45,7 +45,6 @@ struct pom_state {
     POM_BREAK = 2
   } state;
   int seconds;
-  GstElement* playbin;
   GTimer* timer;
   RsvgHandle* tomato_svg;
 };
@@ -69,40 +68,11 @@ static void pom_notify(struct pom_state* state, const gchar* summary, const gcha
   /* Play the alarm tone if we need to. */
   if (sound) {
     gchar* alarm_tone_filename = g_build_filename(PKGDATADIR, "timerexpired.ogg", NULL);
-    GFile* tonefile = g_file_new_for_path(alarm_tone_filename);
+    ca_gtk_play_for_widget(state->label, 0,
+      CA_PROP_MEDIA_FILENAME, alarm_tone_filename,
+      CA_PROP_CANBERRA_ENABLE, "1",  /* force override disabling of event sounds */
+      NULL);
     g_free(alarm_tone_filename);
-
-    g_object_set(G_OBJECT(state->playbin), "uri", g_file_get_uri(tonefile), NULL);
-    g_object_unref(tonefile);
-    gst_element_set_state(state->playbin, GST_STATE_PLAYING);
-  }
-}
-
-static void pom_gst_message(GstBus* bus, GstMessage* msg, gpointer data)
-{
-  struct pom_state* state = data;
-  GError* err = NULL;
-  gchar* debuginfo = NULL;
-  (void) bus;
-
-  switch (msg->type) {
-    case GST_MESSAGE_EOS:
-      /* We reached the end of the file; reset the stream. */
-      gst_element_set_state(state->playbin, GST_STATE_NULL);
-      break;
-
-    case GST_MESSAGE_ERROR:
-      /* Report an error playing the file. */
-      gst_element_set_state(state->playbin, GST_STATE_NULL);
-      gst_message_parse_error(msg, &err, &debuginfo);
-      g_printerr("GStreamer error: %s\n", err->message);
-      g_printerr("Debug info: %s\n", debuginfo);
-      g_error_free(err);
-      g_free(debuginfo);
-      break;
-
-    default:
-      break;
   }
 }
 
@@ -212,7 +182,6 @@ static const GtkActionEntry menu_actions[] = {
 static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpointer data)
 {
   struct pom_state* state;
-  GstBus* bus;
   gchar* logo_filename;
   GdkPixbuf* minitomato;
   GtkWidget* hbox;
@@ -224,8 +193,6 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
 
   if (!notify_is_initted())
     notify_init("Pomodoro");
-
-  gst_init(NULL, NULL);
 
   /* Build the widget structure. */
   state = g_malloc0(sizeof(struct pom_state));
@@ -277,12 +244,6 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
   panel_applet_set_flags(applet, PANEL_APPLET_EXPAND_MINOR);
   gtk_box_pack_start(GTK_BOX(hbox), state->label, FALSE, FALSE, 0);
   gtk_widget_show_all(GTK_WIDGET(applet));
-
-  /* Prepare GStreamer for playing the alarm tone. */
-  state->playbin = gst_element_factory_make("playbin", NULL);
-  bus = gst_element_get_bus(state->playbin);
-  gst_bus_add_signal_watch(bus);
-  g_signal_connect(G_OBJECT(bus), "message", G_CALLBACK(pom_gst_message), state);
 
   state->timer = g_timer_new();
 

@@ -1,5 +1,5 @@
 # pomodoro-applet: timer for the Pomodoro Technique
-# Copyright (C) 2010-2012 John Stumpo
+# Copyright (C) 2010-2012, 2014 John Stumpo
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -33,9 +33,9 @@ AC_SUBST([LIBPANELAPPLET_LIBS])
 PKG_CHECK_MODULES([LIBNOTIFY], [libnotify >= 0.7])
 AC_SUBST([LIBNOTIFY_CFLAGS])
 AC_SUBST([LIBNOTIFY_LIBS])
-PKG_CHECK_MODULES([GSTREAMER], [gstreamer-0.10])
-AC_SUBST([GSTREAMER_CFLAGS])
-AC_SUBST([GSTREAMER_LIBS])
+PKG_CHECK_MODULES([LIBCANBERRA_GTK], [libcanberra-gtk3])
+AC_SUBST([LIBCANBERRA_GTK_CFLAGS])
+AC_SUBST([LIBCANBERRA_GTK_LIBS])
 PKG_CHECK_MODULES([LIBRSVG], [librsvg-2.0 >= 2.36])
 AC_SUBST([LIBRSVG_CFLAGS])
 AC_SUBST([LIBRSVG_LIBS])
