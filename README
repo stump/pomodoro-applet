@@ -3,13 +3,13 @@ for the Pomodoro Technique (http://www.pomodorotechnique.com/). You will
 need the development files for libnotify, libcanberra-gtk, libpanel-applet,
 and librsvg to compile this.
 
-The main author is John Stumpo <stump@jstump.com>.
+The main author is John Stumpo <stump@stump.io>.
 
 Releases are at:
-  http://ftp.jstump.com/pub/pomodoro-applet/
+  http://ftp.stump.io/software/pomodoro-applet/
 
 There is a mailing list for discussion, patches, and announcements at:
-  https://www.jstump.com/mailman/listinfo/pomodoro-applet
+  https://stump.io/mailman/listinfo/pomodoro-applet
 
 
 timerexpired.ogg was generated with:
