@@ -15,18 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+#include "applet-common.h"
 
-#include <gtk/gtk.h>
-#include <panel-applet.h>
 #include <libnotify/notify.h>
 #include <canberra-gtk.h>
 #include <librsvg/rsvg.h>
 #include <glib/gi18n.h>
-
-#include <string.h>
 
 #define WORK_SECONDS 25*60
 #define BREAK_SECONDS 5*60
@@ -243,27 +237,3 @@ GtkActionGroup* pom_make_action_group(struct pom_state* state)
   gtk_action_group_add_actions(action_group, menu_actions, G_N_ELEMENTS(menu_actions), state);
   return action_group;
 }
-
-static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpointer data)
-{
-  struct pom_state* state;
-  GtkActionGroup* action_group;
-  (void) data;
-
-  if (strcmp(iid, "PomodoroApplet") != 0)
-    return FALSE;
-
-  state = pom_common_fill(GTK_BIN(applet));
-
-  /* Set up the action group and menu. */
-  action_group = pom_make_action_group(state);
-  panel_applet_setup_menu(applet, pom_menu_xml, action_group);
-  g_object_unref(action_group);
-  panel_applet_set_flags(applet, PANEL_APPLET_EXPAND_MINOR);
-
-  gtk_widget_show_all(GTK_WIDGET(applet));
-
-  return TRUE;
-}
-
-PANEL_APPLET_OUT_PROCESS_FACTORY("PomodoroAppletFactory", PANEL_TYPE_APPLET, pomodoro_applet_fill, NULL);

@@ -20,7 +20,7 @@ applet_PROGRAMS = pomodoro-applet
 pixmapdir = $(datadir)/pixmaps
 pixmap_DATA = pomodoro.svg
 
-pomodoro_applet_SOURCES = pomodoro.c
+pomodoro_applet_SOURCES = applet-common.c applet-common.h applet-gnome.c
 pomodoro_applet_CPPFLAGS = @LIBPANELAPPLET_CFLAGS@ @LIBNOTIFY_CFLAGS@ @LIBCANBERRA_GTK_CFLAGS@ @LIBRSVG_CFLAGS@ -DPKGDATADIR='"$(pkgdatadir)"' -DPIXMAPDIR='"$(pixmapdir)"' -DGNOMELOCALEDIR='"$(localedir)"'
 pomodoro_applet_LDADD = @LIBPANELAPPLET_LIBS@ @LIBNOTIFY_LIBS@ @LIBCANBERRA_GTK_LIBS@ @LIBRSVG_LIBS@
 

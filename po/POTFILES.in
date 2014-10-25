@@ -1,2 +1,2 @@
-src/pomodoro.c
+src/applet-common.c
 [type: gettext/ini]src/io.stump.PomodoroApplet.panel-applet.in.in
