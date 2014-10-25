@@ -24,7 +24,6 @@
 #include <libnotify/notify.h>
 #include <canberra-gtk.h>
 #include <librsvg/rsvg.h>
-#include <librsvg/rsvg-cairo.h>
 #include <glib/gi18n.h>
 
 #include <string.h>
