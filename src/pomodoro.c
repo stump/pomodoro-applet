@@ -170,7 +170,7 @@ static void pom_about(GtkAction* action, gpointer data)
   g_object_unref(G_OBJECT(logo));
 }
 
-static const gchar* menu_xml =
+const gchar* pom_menu_xml =
   "<menuitem name=\"About\" action=\"About\" />"
 ;
 
@@ -178,17 +178,12 @@ static const GtkActionEntry menu_actions[] = {
   {"About", GTK_STOCK_ABOUT, N_("_About"), NULL, NULL, G_CALLBACK(pom_about)},
 };
 
-static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpointer data)
+struct pom_state* pom_common_fill(GtkBin* applet)
 {
   struct pom_state* state;
   gchar* logo_filename;
   GdkPixbuf* minitomato;
   GtkWidget* hbox;
-  GtkActionGroup* action_group;
-  (void) data;
-
-  if (strcmp(iid, "PomodoroApplet") != 0)
-    return FALSE;
 
   if (!notify_is_initted())
     notify_init("Pomodoro");
@@ -234,17 +229,39 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
   }
   g_free(logo_filename);
 
-  /* Set up the action group and menu. */
-  action_group = gtk_action_group_new("Pomodoro Applet Actions");
+  gtk_box_pack_start(GTK_BOX(hbox), state->label, FALSE, FALSE, 0);
+  state->timer = g_timer_new();
+
+  return state;
+}
+
+
+GtkActionGroup* pom_make_action_group(struct pom_state* state)
+{
+  GtkActionGroup* action_group = action_group = gtk_action_group_new("Pomodoro Applet Actions");
   gtk_action_group_set_translation_domain(action_group, GETTEXT_PACKAGE);
   gtk_action_group_add_actions(action_group, menu_actions, G_N_ELEMENTS(menu_actions), state);
-  panel_applet_setup_menu(applet, menu_xml, action_group);
+  return action_group;
+}
+
+static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpointer data)
+{
+  struct pom_state* state;
+  GtkActionGroup* action_group;
+  (void) data;
+
+  if (strcmp(iid, "PomodoroApplet") != 0)
+    return FALSE;
+
+  state = pom_common_fill(GTK_BIN(applet));
+
+  /* Set up the action group and menu. */
+  action_group = pom_make_action_group(state);
+  panel_applet_setup_menu(applet, pom_menu_xml, action_group);
   g_object_unref(action_group);
   panel_applet_set_flags(applet, PANEL_APPLET_EXPAND_MINOR);
-  gtk_box_pack_start(GTK_BOX(hbox), state->label, FALSE, FALSE, 0);
-  gtk_widget_show_all(GTK_WIDGET(applet));
 
-  state->timer = g_timer_new();
+  gtk_widget_show_all(GTK_WIDGET(applet));
 
   return TRUE;
 }
