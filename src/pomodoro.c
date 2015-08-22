@@ -24,7 +24,6 @@
 #include <libnotify/notify.h>
 #include <gst/gst.h>
 #include <librsvg/rsvg.h>
-#include <librsvg/rsvg-cairo.h>
 #include <glib/gi18n.h>
 
 #include <string.h>
@@ -178,13 +177,14 @@ static gboolean pom_button_pressed(GtkWidget* ebox, GdkEventButton* event, struc
   return FALSE;
 }
 
-static void pom_about(GtkAction* action, gpointer data)
+static void pom_about(GSimpleAction *action, GVariant *parameter, gpointer data)
 {
   const gchar* authors[] = {"John Stumpo", NULL};
   const gchar* artists[] = {"J\xc3\xa1nos Horv\xc3\xa1th (icon)", NULL};
   GdkPixbuf* logo = rsvg_handle_get_pixbuf(((struct pom_state*)data)->tomato_svg);
 
   (void) action;
+  (void) parameter;
   (void) data;
 
   gtk_show_about_dialog(NULL,
@@ -202,11 +202,16 @@ static void pom_about(GtkAction* action, gpointer data)
 }
 
 static const gchar* menu_xml =
-  "<menuitem name=\"About\" action=\"About\" />"
+  "<section>\
+     <item>\
+       <attribute name=\"label\" translatable=\"yes\">_About</attribute>\
+       <attribute name=\"action\">pomodoro.about</attribute>\
+     </item>\
+   </section>"
 ;
 
-static const GtkActionEntry menu_actions[] = {
-  {"About", GTK_STOCK_ABOUT, N_("_About"), NULL, NULL, G_CALLBACK(pom_about)},
+static const GActionEntry menu_actions[] = {
+  {"about", pom_about, NULL, NULL, NULL, NULL},
 };
 
 static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpointer data)
@@ -216,7 +221,7 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
   gchar* logo_filename;
   GdkPixbuf* minitomato;
   GtkWidget* hbox;
-  GtkActionGroup* action_group;
+  GSimpleActionGroup* action_group;
   (void) data;
 
   if (strcmp(iid, "PomodoroApplet") != 0)
@@ -269,10 +274,10 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
   g_free(logo_filename);
 
   /* Set up the action group and menu. */
-  action_group = gtk_action_group_new("Pomodoro Applet Actions");
-  gtk_action_group_set_translation_domain(action_group, GETTEXT_PACKAGE);
-  gtk_action_group_add_actions(action_group, menu_actions, G_N_ELEMENTS(menu_actions), state);
-  panel_applet_setup_menu(applet, menu_xml, action_group);
+  action_group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (action_group), menu_actions, G_N_ELEMENTS(menu_actions), state);
+  panel_applet_setup_menu(applet, menu_xml, action_group, GETTEXT_PACKAGE);
+  gtk_widget_insert_action_group (GTK_WIDGET (applet), "pomodoro", G_ACTION_GROUP (action_group));
   g_object_unref(action_group);
   panel_applet_set_flags(applet, PANEL_APPLET_EXPAND_MINOR);
   gtk_box_pack_start(GTK_BOX(hbox), state->label, FALSE, FALSE, 0);
