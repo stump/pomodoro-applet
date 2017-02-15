@@ -20,6 +20,8 @@ AC_CONFIG_SRCDIR([src/pomodoro.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([1.11 foreign])
 AC_CONFIG_MACRO_DIR([m4])
+LT_INIT([dlopen disable-static])
+LT_LIB_M
 
 # Checks for programs.
 AC_PROG_CC
@@ -69,6 +71,5 @@ AC_MSG_RESULT([$SERVICEDIR])
 AC_CONFIG_FILES([Makefile
                  po/Makefile.in
                  src/Makefile
-                 src/com.jstump.PomodoroApplet.panel-applet.in
-                 src/org.gnome.panel.applet.PomodoroAppletFactory.service])
+                 src/com.jstump.PomodoroApplet.panel-applet.in])
 AC_OUTPUT
