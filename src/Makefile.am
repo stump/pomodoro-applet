@@ -16,14 +16,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 appletdir = $(APPLETDIR)
-applet_PROGRAMS = pomodoro-applet
+applet_PROGRAMS = pomodoro-applet-mate
 
 pixmapdir = $(datadir)/pixmaps
 pixmap_DATA = pomodoro.svg
 
-pomodoro_applet_SOURCES = applet-common.c applet-common.h applet-gnome.c
-pomodoro_applet_CPPFLAGS = @LIBMATEPANELAPPLET_CFLAGS@ @LIBNOTIFY_CFLAGS@ @LIBCANBERRA_GTK_CFLAGS@ @LIBRSVG_CFLAGS@ -DPKGDATADIR='"$(pkgdatadir)"' -DPIXMAPDIR='"$(pixmapdir)"' -DMATELOCALEDIR='"$(localedir)"'
-pomodoro_applet_LDADD = @LIBMATEPANELAPPLET_LIBS@ @LIBNOTIFY_LIBS@ @LIBCANBERRA_GTK_LIBS@ @LIBRSVG_LIBS@
+pomodoro_applet_mate_SOURCES = applet-common.c applet-common.h applet-mate.c
+pomodoro_applet_mate_CPPFLAGS = @LIBMATEPANELAPPLET_CFLAGS@ @LIBNOTIFY_CFLAGS@ @LIBCANBERRA_GTK_CFLAGS@ @LIBRSVG_CFLAGS@ -DPKGDATADIR='"$(pkgdatadir)"' -DPIXMAPDIR='"$(pixmapdir)"' -DMATELOCALEDIR='"$(localedir)"'
+pomodoro_applet_mate_LDADD = @LIBMATEPANELAPPLET_LIBS@ @LIBNOTIFY_LIBS@ @LIBCANBERRA_GTK_LIBS@ @LIBRSVG_LIBS@
 
 matepanelappletdir = $(MATEPANELAPPLETDIR)
 matepanelapplet_DATA = io.stump.PomodoroApplet.mate-panel-applet

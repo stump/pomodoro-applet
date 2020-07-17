@@ -1,5 +1,5 @@
 *.o
-pomodoro-applet
+pomodoro-applet-mate
 io.stump.PomodoroApplet.mate-panel-applet
 io.stump.PomodoroApplet.mate-panel-applet.in
 org.mate.panel.applet.PomodoroAppletFactory.service

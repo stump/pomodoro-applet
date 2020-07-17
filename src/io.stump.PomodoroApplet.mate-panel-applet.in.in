@@ -1,6 +1,6 @@
 [Applet Factory]
 Id=PomodoroAppletFactory
-Location=@APPLETDIR@/pomodoro-applet
+Location=@APPLETDIR@/pomodoro-applet-mate
 Name=Pomodoro Applet Factory
 Description=Pomodoro Applet factory
 
