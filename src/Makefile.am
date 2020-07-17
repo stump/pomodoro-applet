@@ -24,17 +24,17 @@ pomodoro_applet_SOURCES = pomodoro.c
 pomodoro_applet_CPPFLAGS = @LIBMATEPANELAPPLET_CFLAGS@ @LIBNOTIFY_CFLAGS@ @GSTREAMER_CFLAGS@ @LIBRSVG_CFLAGS@ -DPKGDATADIR='"$(pkgdatadir)"' -DPIXMAPDIR='"$(pixmapdir)"' -DMATELOCALEDIR='"$(localedir)"'
 pomodoro_applet_LDADD = @LIBMATEPANELAPPLET_LIBS@ @LIBNOTIFY_LIBS@ @GSTREAMER_LIBS@ @LIBRSVG_LIBS@
 
-panelappletdir = $(MATEPANELAPPLETDIR)
-panelapplet_DATA = com.jstump.PomodoroApplet.panel-applet
+matepanelappletdir = $(MATEPANELAPPLETDIR)
+matepanelapplet_DATA = com.jstump.PomodoroApplet.mate-panel-applet
 
 # Adapted from similar rules in intltool.m4; hopefully it'll get
 # included in intltool itself soon enough...
-%.panel-applet:   %.panel-applet.in   $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; $(INTLTOOL_V_MERGE)LC_ALL=C $(INTLTOOL_MERGE) $(INTLTOOL_V_MERGE_OPTIONS) -d -u -c $(top_builddir)/po/.intltool-merge-cache $(top_srcdir)/po $< $@
+%.mate-panel-applet:   %.mate-panel-applet.in   $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; $(INTLTOOL_V_MERGE)LC_ALL=C $(INTLTOOL_MERGE) $(INTLTOOL_V_MERGE_OPTIONS) -d -u -c $(top_builddir)/po/.intltool-merge-cache $(top_srcdir)/po $< $@
 
 servicedir = $(SERVICEDIR)
-service_DATA = org.gnome.panel.applet.PomodoroAppletFactory.service
+service_DATA = org.mate.panel.applet.PomodoroAppletFactory.service
 
 pkgdata_DATA = timerexpired.ogg
 
 EXTRA_DIST = timerexpired.ogg pomodoro.svg
-CLEANFILES = com.jstump.PomodoroApplet.panel-applet
+CLEANFILES = com.jstump.PomodoroApplet.mate-panel-applet

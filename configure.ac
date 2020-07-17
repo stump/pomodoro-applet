@@ -57,8 +57,9 @@ AC_CHECK_HEADERS([string.h])
 # Set some extra paths.
 AS_AC_EXPAND([APPLETDIR], ["${libdir}/pomodoro-applet"])
 AC_SUBST([APPLETDIR])
-AC_MSG_CHECKING([where panel-applet files go])
-AS_AC_EXPAND([MATEPANELAPPLETDIR], ["`${PKG_CONFIG} --variable=libmatepanel_applet_dir libmatepanelapplet-4.0`"])
+AC_MSG_CHECKING([where mate-panel-applet files go])
+# mate-panel doesn't provide this in its .pc file, so we have to just assume...
+AS_AC_EXPAND([MATEPANELAPPLETDIR], ["`${PKG_CONFIG} --variable=prefix libmatepanelapplet-4.0`/share/mate-panel/applets"])
 AC_SUBST([MATEPANELAPPLETDIR])
 AC_MSG_RESULT([$MATEPANELAPPLETDIR])
 AC_MSG_CHECKING([where dbus service files go])
@@ -69,6 +70,6 @@ AC_MSG_RESULT([$SERVICEDIR])
 AC_CONFIG_FILES([Makefile
                  po/Makefile.in
                  src/Makefile
-                 src/com.jstump.PomodoroApplet.panel-applet.in
-                 src/org.gnome.panel.applet.PomodoroAppletFactory.service])
+                 src/com.jstump.PomodoroApplet.mate-panel-applet.in
+                 src/org.mate.panel.applet.PomodoroAppletFactory.service])
 AC_OUTPUT

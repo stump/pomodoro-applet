@@ -1,8 +1,8 @@
 *.o
 pomodoro-applet
-com.jstump.PomodoroApplet.panel-applet
-com.jstump.PomodoroApplet.panel-applet.in
-org.gnome.panel.applet.PomodoroAppletFactory.service
+com.jstump.PomodoroApplet.mate-panel-applet
+com.jstump.PomodoroApplet.mate-panel-applet.in
+org.mate.panel.applet.PomodoroAppletFactory.service
 *.pot
 *.mo
 *.gmo
