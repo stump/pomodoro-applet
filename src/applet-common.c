@@ -1,5 +1,5 @@
 /* pomodoro-applet: timer for the Pomodoro Technique
- * Copyright (C) 2010-2012, 2014 John Stumpo
+ * Copyright (C) 2010-2012, 2014, 2020 John Stumpo
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -143,7 +143,9 @@ static gboolean pom_button_pressed(GtkWidget* ebox, GdkEventButton* event, struc
 
 static void pom_about(GtkAction* action, gpointer data)
 {
-  const gchar* authors[] = {"John Stumpo", NULL};
+  const gchar* authors[] = {"John Stumpo",
+                            "Jos\xc3\xa9 Luis Segura Lucas (MATE support)",
+                            NULL};
   const gchar* artists[] = {"J\xc3\xa1nos Horv\xc3\xa1th (icon)", NULL};
   GdkPixbuf* logo = rsvg_handle_get_pixbuf(((struct pom_state*)data)->tomato_svg);
 
@@ -154,7 +156,7 @@ static void pom_about(GtkAction* action, gpointer data)
     "authors", authors,
     "artists", artists,
     "comments", _("Timer for the Pomodoro Technique"),
-    "copyright", "Copyright \xc2\xa9 2010-2012 John Stumpo",
+    "copyright", "Copyright \xc2\xa9 2010-2013, 2020 John Stumpo and other contributors",
     "license", "GNU GPL version 3 or later",
     "logo", logo,
     "version", PACKAGE_VERSION,

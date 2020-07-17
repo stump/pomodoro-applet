@@ -1,5 +1,6 @@
 # pomodoro-applet: timer for the Pomodoro Technique
-# Copyright (C) 2010-2012, 2014 John Stumpo
+# Copyright (C) 2010-2012, 2014, 2020 John Stumpo
+# Copyright (C) 2013 José Luis Segura Lucas
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,9 +28,9 @@ AM_PROG_CC_C_O
 CFLAGS="$CFLAGS -W -Wall"
 
 # Checks for libraries.
-PKG_CHECK_MODULES([LIBPANELAPPLET], [libpanelapplet-4.0])
-AC_SUBST([LIBPANELAPPLET_CFLAGS])
-AC_SUBST([LIBPANELAPPLET_LIBS])
+PKG_CHECK_MODULES([LIBMATEPANELAPPLET], [libmatepanelapplet-4.0])
+AC_SUBST([LIBMATEPANELAPPLET_CFLAGS])
+AC_SUBST([LIBMATEPANELAPPLET_LIBS])
 PKG_CHECK_MODULES([LIBNOTIFY], [libnotify >= 0.7])
 AC_SUBST([LIBNOTIFY_CFLAGS])
 AC_SUBST([LIBNOTIFY_LIBS])
@@ -57,10 +58,11 @@ AC_CHECK_HEADERS([string.h])
 # Set some extra paths.
 AS_AC_EXPAND([APPLETDIR], ["${libdir}/pomodoro-applet"])
 AC_SUBST([APPLETDIR])
-AC_MSG_CHECKING([where panel-applet files go])
-AS_AC_EXPAND([PANELAPPLETDIR], ["`${PKG_CONFIG} --variable=libpanel_applet_dir libpanelapplet-4.0`"])
-AC_SUBST([PANELAPPLETDIR])
-AC_MSG_RESULT([$PANELAPPLETDIR])
+AC_MSG_CHECKING([where mate-panel-applet files go])
+# mate-panel doesn't provide this in its .pc file, so we have to just assume...
+AS_AC_EXPAND([MATEPANELAPPLETDIR], ["`${PKG_CONFIG} --variable=prefix libmatepanelapplet-4.0`/share/mate-panel/applets"])
+AC_SUBST([MATEPANELAPPLETDIR])
+AC_MSG_RESULT([$MATEPANELAPPLETDIR])
 AC_MSG_CHECKING([where dbus service files go])
 AS_AC_EXPAND([SERVICEDIR], ["`${PKG_CONFIG} --variable=session_bus_services_dir dbus-1`"])
 AC_SUBST([SERVICEDIR])
@@ -69,6 +71,6 @@ AC_MSG_RESULT([$SERVICEDIR])
 AC_CONFIG_FILES([Makefile
                  po/Makefile.in
                  src/Makefile
-                 src/io.stump.PomodoroApplet.panel-applet.in
-                 src/org.gnome.panel.applet.PomodoroAppletFactory.service])
+                 src/io.stump.PomodoroApplet.mate-panel-applet.in
+                 src/org.mate.panel.applet.PomodoroAppletFactory.service])
 AC_OUTPUT

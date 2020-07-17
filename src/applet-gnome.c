@@ -1,5 +1,6 @@
 /* pomodoro-applet: timer for the Pomodoro Technique
- * Copyright (C) 2014 John Stumpo
+ * Copyright (C) 2010-2012, 2014, 2020 John Stumpo
+ * Copyright (C) 2013 José Luis Segura Lucas
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,11 +18,11 @@
 
 #include "applet-common.h"
 
-#include <panel-applet.h>
+#include <mate-panel-applet.h>
 
 #include <string.h>
 
-static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpointer data)
+static gboolean pomodoro_applet_fill(MatePanelApplet* applet, const gchar* iid, gpointer data)
 {
   struct pom_state* state;
   GtkActionGroup* action_group;
@@ -34,13 +35,13 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
 
   /* Set up the action group and menu. */
   action_group = pom_make_action_group(state);
-  panel_applet_setup_menu(applet, pom_menu_xml, action_group);
+  mate_panel_applet_setup_menu(applet, pom_menu_xml, action_group);
   g_object_unref(action_group);
-  panel_applet_set_flags(applet, PANEL_APPLET_EXPAND_MINOR);
+  mate_panel_applet_set_flags(applet, MATE_PANEL_APPLET_EXPAND_MINOR);
 
   gtk_widget_show_all(GTK_WIDGET(applet));
 
   return TRUE;
 }
 
-PANEL_APPLET_OUT_PROCESS_FACTORY("PomodoroAppletFactory", PANEL_TYPE_APPLET, pomodoro_applet_fill, NULL);
+MATE_PANEL_APPLET_OUT_PROCESS_FACTORY("PomodoroAppletFactory", PANEL_TYPE_APPLET, "", pomodoro_applet_fill, NULL);
