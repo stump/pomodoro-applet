@@ -1,6 +1,6 @@
-This is pomodoro-applet, a GNOME Panel applet implementing a simple timer
+This is pomodoro-applet, a MATE Panel applet implementing a simple timer
 for the Pomodoro Technique (http://www.pomodorotechnique.com/). You will
-need the development files for libnotify, gstreamer, libpanel-applet,
+need the development files for libnotify, gstreamer, libmate-panel-applet,
 and librsvg to compile this.
 
 The main author is John Stumpo <stump@jstump.com>.
