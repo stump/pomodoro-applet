@@ -28,9 +28,28 @@ AM_PROG_CC_C_O
 CFLAGS="$CFLAGS -W -Wall"
 
 # Checks for libraries.
-PKG_CHECK_MODULES([LIBMATEPANELAPPLET], [libmatepanelapplet-4.0])
-AC_SUBST([LIBMATEPANELAPPLET_CFLAGS])
-AC_SUBST([LIBMATEPANELAPPLET_LIBS])
+AC_ARG_WITH([mate], AS_HELP_STRING([--without-mate],
+  [ignore presence of MATE libraries and do not build MATE support (default
+   is autodetect; alternatively, pass --with-mate to refuse to build without
+   MATE support)]))
+AS_IF([test x"$with_mate" != x"no"], [
+  PKG_CHECK_MODULES([LIBMATEPANELAPPLET], [libmatepanelapplet-4.0], [
+    have_mate=yes
+    AC_SUBST([LIBMATEPANELAPPLET_CFLAGS])
+    AC_SUBST([LIBMATEPANELAPPLET_LIBS])
+  ], [
+    have_mate=no
+  ])
+], [
+  have_mate=no
+])
+AS_IF([test x"$have_mate" = x"no"], [
+  AS_IF([test x"$with_mate" = x"yes"], [
+    AC_MSG_ERROR([MATE not found but support was explicitly requested])
+  ])
+])
+AM_CONDITIONAL([HAVE_MATE], [test x"$have_mate" = x"yes"])
+
 PKG_CHECK_MODULES([LIBNOTIFY], [libnotify >= 0.7])
 AC_SUBST([LIBNOTIFY_CFLAGS])
 AC_SUBST([LIBNOTIFY_LIBS])
@@ -58,11 +77,13 @@ AC_CHECK_HEADERS([string.h])
 # Set some extra paths.
 AS_AC_EXPAND([APPLETDIR], ["${libdir}/pomodoro-applet"])
 AC_SUBST([APPLETDIR])
-AC_MSG_CHECKING([where mate-panel-applet files go])
-# mate-panel doesn't provide this in its .pc file, so we have to just assume...
-AS_AC_EXPAND([MATEPANELAPPLETDIR], ["`${PKG_CONFIG} --variable=prefix libmatepanelapplet-4.0`/share/mate-panel/applets"])
-AC_SUBST([MATEPANELAPPLETDIR])
-AC_MSG_RESULT([$MATEPANELAPPLETDIR])
+AS_IF([test x"$have_mate" = x"yes"], [
+  AC_MSG_CHECKING([where mate-panel-applet files go])
+  # mate-panel doesn't provide this in its .pc file, so we have to just assume...
+  AS_AC_EXPAND([MATEPANELAPPLETDIR], ["`${PKG_CONFIG} --variable=prefix libmatepanelapplet-4.0`/share/mate-panel/applets"])
+  AC_SUBST([MATEPANELAPPLETDIR])
+  AC_MSG_RESULT([$MATEPANELAPPLETDIR])
+])
 AC_MSG_CHECKING([where dbus service files go])
 AS_AC_EXPAND([SERVICEDIR], ["`${PKG_CONFIG} --variable=session_bus_services_dir dbus-1`"])
 AC_SUBST([SERVICEDIR])

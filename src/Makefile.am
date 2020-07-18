@@ -16,24 +16,32 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 appletdir = $(APPLETDIR)
-applet_PROGRAMS = pomodoro-applet-mate
+applet_PROGRAMS =
+if HAVE_MATE
+applet_PROGRAMS += pomodoro-applet-mate
+endif
 
 pixmapdir = $(datadir)/pixmaps
 pixmap_DATA = pomodoro.svg
 
+if HAVE_MATE
 pomodoro_applet_mate_SOURCES = applet-common.c applet-common.h applet-mate.c
 pomodoro_applet_mate_CPPFLAGS = @LIBMATEPANELAPPLET_CFLAGS@ @LIBNOTIFY_CFLAGS@ @LIBCANBERRA_GTK_CFLAGS@ @LIBRSVG_CFLAGS@ -DPKGDATADIR='"$(pkgdatadir)"' -DPIXMAPDIR='"$(pixmapdir)"' -DMATELOCALEDIR='"$(localedir)"'
 pomodoro_applet_mate_LDADD = @LIBMATEPANELAPPLET_LIBS@ @LIBNOTIFY_LIBS@ @LIBCANBERRA_GTK_LIBS@ @LIBRSVG_LIBS@
 
 matepanelappletdir = $(MATEPANELAPPLETDIR)
 matepanelapplet_DATA = io.stump.PomodoroApplet.mate-panel-applet
+endif
 
 # Adapted from similar rules in intltool.m4; hopefully it'll get
 # included in intltool itself soon enough...
 %.mate-panel-applet:   %.mate-panel-applet.in   $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; $(INTLTOOL_V_MERGE)LC_ALL=C $(INTLTOOL_MERGE) $(INTLTOOL_V_MERGE_OPTIONS) -d -u -c $(top_builddir)/po/.intltool-merge-cache $(top_srcdir)/po $< $@
 
 servicedir = $(SERVICEDIR)
-service_DATA = org.mate.panel.applet.PomodoroAppletFactory.service
+service_DATA =
+if HAVE_MATE
+service_DATA += org.mate.panel.applet.PomodoroAppletFactory.service
+endif
 
 pkgdata_DATA = timerexpired.ogg
 
