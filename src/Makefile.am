@@ -15,11 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+pomodoro_applet_libdir = ${pkglibdir}/${LIBPANEL_APPLET_API_VERSION}
+pomodoro_applet_lib_LTLIBRARIES =
+if HAVE_GNOME
+pomodoro_applet_lib_LTLIBRARIES += libpomodoro-applet.la
+endif
+
 appletdir = $(APPLETDIR)
 applet_PROGRAMS =
-if HAVE_GNOME
-applet_PROGRAMS += pomodoro-applet-gnome
-endif
 if HAVE_MATE
 applet_PROGRAMS += pomodoro-applet-mate
 endif
@@ -28,9 +31,9 @@ pixmapdir = $(datadir)/pixmaps
 pixmap_DATA = pomodoro.svg
 
 if HAVE_GNOME
-pomodoro_applet_gnome_SOURCES = applet-common.c applet-common.h applet-gnome.c
-pomodoro_applet_gnome_CPPFLAGS = @LIBPANELAPPLET_CFLAGS@ @LIBNOTIFY_CFLAGS@ @LIBCANBERRA_GTK_CFLAGS@ @LIBRSVG_CFLAGS@ -DPKGDATADIR='"$(pkgdatadir)"' -DPIXMAPDIR='"$(pixmapdir)"' -DGNOMELOCALEDIR='"$(localedir)"'
-pomodoro_applet_gnome_LDADD = @LIBPANELAPPLET_LIBS@ @LIBNOTIFY_LIBS@ @LIBCANBERRA_GTK_LIBS@ @LIBRSVG_LIBS@
+libpomodoro_applet_la_SOURCES = applet-common.c applet-common.h applet-gnome.c
+libpomodoro_applet_la_CPPFLAGS = @LIBPANELAPPLET_CFLAGS@ @LIBNOTIFY_CFLAGS@ @LIBCANBERRA_GTK_CFLAGS@ @LIBRSVG_CFLAGS@ -DPKGDATADIR='"$(pkgdatadir)"' -DPIXMAPDIR='"$(pixmapdir)"' -DGNOMELOCALEDIR='"$(localedir)"'
+libpomodoro_applet_la_LIBADD = @LIBPANELAPPLET_LIBS@ @LIBNOTIFY_LIBS@ @LIBCANBERRA_GTK_LIBS@ @LIBRSVG_LIBS@
 
 panelappletdir = $(PANELAPPLETDIR)
 panelapplet_DATA = io.stump.PomodoroApplet.panel-applet
@@ -52,9 +55,6 @@ endif
 
 servicedir = $(SERVICEDIR)
 service_DATA =
-if HAVE_GNOME
-service_DATA += org.gnome.panel.applet.PomodoroAppletFactory.service
-endif
 if HAVE_MATE
 service_DATA += org.mate.panel.applet.PomodoroAppletFactory.service
 endif

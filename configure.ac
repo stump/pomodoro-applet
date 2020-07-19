@@ -21,6 +21,8 @@ AC_CONFIG_SRCDIR([src/applet-common.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([1.11 foreign])
 AC_CONFIG_MACRO_DIR([m4])
+LT_INIT([dlopen disable-static])
+LT_LIB_M
 
 # Checks for programs.
 AC_PROG_CC
@@ -33,7 +35,7 @@ AC_ARG_WITH([gnome], AS_HELP_STRING([--without-gnome],
    is autodetect; alternatively, pass --with-gnome to refuse to build without
    GNOME support)]))
 AS_IF([test x"$with_gnome" != x"no"], [
-  PKG_CHECK_MODULES([LIBPANELAPPLET], [libpanelapplet-4.0], [
+  PKG_CHECK_MODULES([LIBPANELAPPLET], [libpanel-applet], [
     have_gnome=yes
     AC_SUBST([LIBPANELAPPLET_CFLAGS])
     AC_SUBST([LIBPANELAPPLET_LIBS])
@@ -101,7 +103,7 @@ AS_AC_EXPAND([APPLETDIR], ["${libdir}/pomodoro-applet"])
 AC_SUBST([APPLETDIR])
 AS_IF([test x"$have_gnome" = x"yes"], [
   AC_MSG_CHECKING([where panel-applet files go])
-  AS_AC_EXPAND([PANELAPPLETDIR], ["`${PKG_CONFIG} --variable=libpanel_applet_dir libpanelapplet-4.0`"])
+  AS_AC_EXPAND([PANELAPPLETDIR], ["`${PKG_CONFIG} --variable=libpanel_applet_dir libpanel-applet`"])
   AC_SUBST([PANELAPPLETDIR])
   AC_MSG_RESULT([$PANELAPPLETDIR])
 ])
@@ -121,7 +123,6 @@ AC_CONFIG_FILES([Makefile
                  po/Makefile.in
                  src/Makefile
                  src/io.stump.PomodoroApplet.panel-applet.in
-                 src/org.gnome.panel.applet.PomodoroAppletFactory.service
                  src/io.stump.PomodoroApplet.mate-panel-applet.in
                  src/org.mate.panel.applet.PomodoroAppletFactory.service])
 AC_OUTPUT

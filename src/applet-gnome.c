@@ -25,7 +25,7 @@
 static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpointer data)
 {
   struct pom_state* state;
-  GtkActionGroup* action_group;
+  GSimpleActionGroup* action_group;
   (void) data;
 
   if (strcmp(iid, "PomodoroApplet") != 0)
@@ -34,8 +34,9 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
   state = pom_common_fill(GTK_BIN(applet));
 
   /* Set up the action group and menu. */
-  action_group = pom_make_action_group(state);
-  panel_applet_setup_menu(applet, pom_menu_xml, action_group);
+  action_group = pom_make_action_group_gnome(state);
+  panel_applet_setup_menu(applet, pom_menu_xml_gnome, action_group, GETTEXT_PACKAGE);
+  gtk_widget_insert_action_group(GTK_WIDGET(applet), "pomodoro", G_ACTION_GROUP(action_group));
   g_object_unref(action_group);
   panel_applet_set_flags(applet, PANEL_APPLET_EXPAND_MINOR);
 
@@ -44,4 +45,4 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
   return TRUE;
 }
 
-PANEL_APPLET_OUT_PROCESS_FACTORY("PomodoroAppletFactory", PANEL_TYPE_APPLET, pomodoro_applet_fill, NULL);
+PANEL_APPLET_IN_PROCESS_FACTORY("PomodoroAppletFactory", PANEL_TYPE_APPLET, pomodoro_applet_fill, NULL);

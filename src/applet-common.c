@@ -166,6 +166,26 @@ static void pom_about(GtkAction* action, gpointer data)
   g_object_unref(G_OBJECT(logo));
 }
 
+static void pom_about_gnome(GSimpleAction *action, GVariant *parameter, gpointer data)
+{
+  (void) action;
+  (void) parameter;
+  pom_about(NULL, data);
+}
+
+const gchar* pom_menu_xml_gnome =
+  "<section>\
+     <item>\
+       <attribute name=\"label\" translatable=\"yes\">_About</attribute>\
+       <attribute name=\"action\">pomodoro.about</attribute>\
+     </item>\
+   </section>"
+;
+
+static const GActionEntry menu_actions_gnome[] = {
+  {"about", pom_about_gnome, NULL, NULL, NULL, NULL},
+};
+
 const gchar* pom_menu_xml =
   "<menuitem name=\"About\" action=\"About\" />"
 ;
@@ -231,6 +251,12 @@ struct pom_state* pom_common_fill(GtkBin* applet)
   return state;
 }
 
+GSimpleActionGroup* pom_make_action_group_gnome(struct pom_state* state)
+{
+  GSimpleActionGroup* action_group = g_simple_action_group_new();
+  g_action_map_add_action_entries(G_ACTION_MAP(action_group), menu_actions_gnome, G_N_ELEMENTS(menu_actions), state);
+  return action_group;
+}
 
 GtkActionGroup* pom_make_action_group(struct pom_state* state)
 {
