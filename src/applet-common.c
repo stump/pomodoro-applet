@@ -145,6 +145,7 @@ void pom_about(struct pom_state* state)
 {
   const gchar* authors[] = {"John Stumpo",
                             "Jos\xc3\xa9 Luis Segura Lucas (MATE support)",
+                            "Ball\xc3\xb3 Gy\xc3\xb6rgy (modern GNOME support)",
                             NULL};
   const gchar* artists[] = {"J\xc3\xa1nos Horv\xc3\xa1th (icon)", NULL};
   GdkPixbuf* logo = rsvg_handle_get_pixbuf(state->tomato_svg);
@@ -153,7 +154,7 @@ void pom_about(struct pom_state* state)
     "authors", authors,
     "artists", artists,
     "comments", _("Timer for the Pomodoro Technique"),
-    "copyright", "Copyright \xc2\xa9 2010-2013, 2020 John Stumpo and other contributors",
+    "copyright", "Copyright \xc2\xa9 2010-2015, 2017, 2020 John Stumpo and other contributors",
     "license", "GNU GPL version 3 or later",
     "logo", logo,
     "version", PACKAGE_VERSION,
