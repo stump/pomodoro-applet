@@ -23,7 +23,6 @@ AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([1.11 foreign])
 AC_CONFIG_MACRO_DIR([m4])
 LT_INIT([dlopen disable-static])
-LT_LIB_M
 
 # Checks for programs.
 AC_PROG_CC
