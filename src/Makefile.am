@@ -16,14 +16,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-pomodoro_applet_libdir = ${pkglibdir}/${LIBPANEL_APPLET_API_VERSION}
-pomodoro_applet_lib_LTLIBRARIES =
-if HAVE_GNOME
-pomodoro_applet_lib_LTLIBRARIES += libpomodoro-applet.la
-endif
-
 appletdir = $(APPLETDIR)
+applet_LTLIBRARIES =
 applet_PROGRAMS =
+if HAVE_GNOME
+applet_LTLIBRARIES += libpomodoro-applet.la
+endif
 if HAVE_MATE
 applet_PROGRAMS += pomodoro-applet-mate
 endif
