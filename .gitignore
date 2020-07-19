@@ -1,5 +1,9 @@
 *.o
+pomodoro-applet-gnome
 pomodoro-applet-mate
+io.stump.PomodoroApplet.panel-applet
+io.stump.PomodoroApplet.panel-applet.in
+org.gnome.panel.applet.PomodoroAppletFactory.service
 io.stump.PomodoroApplet.mate-panel-applet
 io.stump.PomodoroApplet.mate-panel-applet.in
 org.mate.panel.applet.PomodoroAppletFactory.service

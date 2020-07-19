@@ -1,7 +1,7 @@
-This is pomodoro-applet, a MATE Panel applet implementing a simple timer
-for the Pomodoro Technique (http://www.pomodorotechnique.com/). You will
-need the development files for libnotify, libcanberra-gtk, librsvg, and
-libmate-panel-applet to compile this.
+This is pomodoro-applet, a GNOME and MATE Panel applet implementing a simple
+timer for the Pomodoro Technique (http://www.pomodorotechnique.com/). You
+will need the development files for libnotify, libcanberra-gtk, librsvg, and
+either libpanel-applet or libmate-panel-applet to compile this.
 
 The main author is John Stumpo <stump@stump.io>.
 

@@ -28,6 +28,28 @@ AM_PROG_CC_C_O
 CFLAGS="$CFLAGS -W -Wall"
 
 # Checks for libraries.
+AC_ARG_WITH([gnome], AS_HELP_STRING([--without-gnome],
+  [ignore presence of GNOME libraries and do not build GNOME support (default
+   is autodetect; alternatively, pass --with-gnome to refuse to build without
+   GNOME support)]))
+AS_IF([test x"$with_gnome" != x"no"], [
+  PKG_CHECK_MODULES([LIBPANELAPPLET], [libpanelapplet-4.0], [
+    have_gnome=yes
+    AC_SUBST([LIBPANELAPPLET_CFLAGS])
+    AC_SUBST([LIBPANELAPPLET_LIBS])
+  ], [
+    have_gnome=no
+  ])
+], [
+  have_gnome=no
+])
+AS_IF([test x"$have_gnome" = x"no"], [
+  AS_IF([test x"$with_gnome" = x"yes"], [
+    AC_MSG_ERROR([GNOME not found but support was explicitly requested])
+  ])
+])
+AM_CONDITIONAL([HAVE_GNOME], [test x"$have_gnome" = x"yes"])
+
 AC_ARG_WITH([mate], AS_HELP_STRING([--without-mate],
   [ignore presence of MATE libraries and do not build MATE support (default
    is autodetect; alternatively, pass --with-mate to refuse to build without
@@ -77,6 +99,12 @@ AC_CHECK_HEADERS([string.h])
 # Set some extra paths.
 AS_AC_EXPAND([APPLETDIR], ["${libdir}/pomodoro-applet"])
 AC_SUBST([APPLETDIR])
+AS_IF([test x"$have_gnome" = x"yes"], [
+  AC_MSG_CHECKING([where panel-applet files go])
+  AS_AC_EXPAND([PANELAPPLETDIR], ["`${PKG_CONFIG} --variable=libpanel_applet_dir libpanelapplet-4.0`"])
+  AC_SUBST([PANELAPPLETDIR])
+  AC_MSG_RESULT([$PANELAPPLETDIR])
+])
 AS_IF([test x"$have_mate" = x"yes"], [
   AC_MSG_CHECKING([where mate-panel-applet files go])
   # mate-panel doesn't provide this in its .pc file, so we have to just assume...
@@ -92,6 +120,8 @@ AC_MSG_RESULT([$SERVICEDIR])
 AC_CONFIG_FILES([Makefile
                  po/Makefile.in
                  src/Makefile
+                 src/io.stump.PomodoroApplet.panel-applet.in
+                 src/org.gnome.panel.applet.PomodoroAppletFactory.service
                  src/io.stump.PomodoroApplet.mate-panel-applet.in
                  src/org.mate.panel.applet.PomodoroAppletFactory.service])
 AC_OUTPUT
