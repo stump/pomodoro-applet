@@ -153,6 +153,7 @@ void pom_about(struct pom_state* state)
   gtk_show_about_dialog(NULL,
     "authors", authors,
     "artists", artists,
+    "program-name", _("Pomodoro Applet"),
     "comments", _("Timer for the Pomodoro Technique"),
     "copyright", "Copyright \xc2\xa9 2010-2015, 2017, 2020 John Stumpo and other contributors",
     "license", "GNU GPL version 3 or later",
