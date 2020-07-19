@@ -20,7 +20,7 @@ appletdir = $(APPLETDIR)
 applet_LTLIBRARIES =
 applet_PROGRAMS =
 if HAVE_GNOME
-applet_LTLIBRARIES += libpomodoro-applet.la
+applet_LTLIBRARIES += pomodoro-applet-gnome.la
 endif
 if HAVE_MATE
 applet_PROGRAMS += pomodoro-applet-mate
@@ -30,10 +30,10 @@ pixmapdir = $(datadir)/pixmaps
 pixmap_DATA = pomodoro.svg
 
 if HAVE_GNOME
-libpomodoro_applet_la_SOURCES = applet-common.c applet-common.h applet-gnome.c
-libpomodoro_applet_la_CPPFLAGS = @LIBPANELAPPLET_CFLAGS@ @LIBNOTIFY_CFLAGS@ @LIBCANBERRA_GTK_CFLAGS@ @LIBRSVG_CFLAGS@ -DPKGDATADIR='"$(pkgdatadir)"' -DPIXMAPDIR='"$(pixmapdir)"' -DGNOMELOCALEDIR='"$(localedir)"'
-libpomodoro_applet_la_LDFLAGS = -shared -module -avoid-version -export-dynamic
-libpomodoro_applet_la_LIBADD = @LIBPANELAPPLET_LIBS@ @LIBNOTIFY_LIBS@ @LIBCANBERRA_GTK_LIBS@ @LIBRSVG_LIBS@
+pomodoro_applet_gnome_la_SOURCES = applet-common.c applet-common.h applet-gnome.c
+pomodoro_applet_gnome_la_CPPFLAGS = @LIBPANELAPPLET_CFLAGS@ @LIBNOTIFY_CFLAGS@ @LIBCANBERRA_GTK_CFLAGS@ @LIBRSVG_CFLAGS@ -DPKGDATADIR='"$(pkgdatadir)"' -DPIXMAPDIR='"$(pixmapdir)"' -DGNOMELOCALEDIR='"$(localedir)"'
+pomodoro_applet_gnome_la_LDFLAGS = -shared -module -avoid-version -export-dynamic
+pomodoro_applet_gnome_la_LIBADD = @LIBPANELAPPLET_LIBS@ @LIBNOTIFY_LIBS@ @LIBCANBERRA_GTK_LIBS@ @LIBRSVG_LIBS@
 
 panelappletdir = $(PANELAPPLETDIR)
 panelapplet_DATA = io.stump.PomodoroApplet.panel-applet

@@ -1,7 +1,7 @@
 [Applet Factory]
 Id=PomodoroAppletFactory
 InProcess=true
-Location=@APPLETDIR@/libpomodoro-applet.so
+Location=@APPLETDIR@/pomodoro-applet-gnome.so
 Name=Pomodoro Applet Factory
 Description=Pomodoro Applet factory
 
