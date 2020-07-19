@@ -19,8 +19,23 @@
 #include "applet-common.h"
 
 #include <mate-panel-applet.h>
+#include <glib/gi18n.h>
 
 #include <string.h>
+
+static void about_wrap(GtkAction* action, gpointer data)
+{
+  (void) action;
+  pom_about(data);
+}
+
+static const gchar* menu_xml =
+  "<menuitem name=\"About\" action=\"About\" />"
+;
+
+static const GtkActionEntry menu_actions[] = {
+  {"About", GTK_STOCK_ABOUT, N_("_About"), NULL, NULL, G_CALLBACK(about_wrap)},
+};
 
 static gboolean pomodoro_applet_fill(MatePanelApplet* applet, const gchar* iid, gpointer data)
 {
@@ -34,8 +49,10 @@ static gboolean pomodoro_applet_fill(MatePanelApplet* applet, const gchar* iid, 
   state = pom_common_fill(GTK_BIN(applet));
 
   /* Set up the action group and menu. */
-  action_group = pom_make_action_group(state);
-  mate_panel_applet_setup_menu(applet, pom_menu_xml, action_group);
+  action_group = gtk_action_group_new("Pomodoro Applet Actions");
+  gtk_action_group_set_translation_domain(action_group, GETTEXT_PACKAGE);
+  gtk_action_group_add_actions(action_group, menu_actions, G_N_ELEMENTS(menu_actions), state);
+  mate_panel_applet_setup_menu(applet, menu_xml, action_group);
   g_object_unref(action_group);
   mate_panel_applet_set_flags(applet, MATE_PANEL_APPLET_EXPAND_MINOR);
 

@@ -1,3 +1,4 @@
 src/applet-common.c
+src/applet-mate.c
 [type: gettext/ini]src/io.stump.PomodoroApplet.panel-applet.in.in
 [type: gettext/ini]src/io.stump.PomodoroApplet.mate-panel-applet.in.in

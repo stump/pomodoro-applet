@@ -26,13 +26,9 @@
 
 G_BEGIN_DECLS
 
-extern const gchar* pom_menu_xml_gnome;
-extern const gchar* pom_menu_xml;
-
 struct pom_state;
+void pom_about(struct pom_state* state);
 struct pom_state* pom_common_fill(GtkBin* applet);
-GSimpleActionGroup* pom_make_action_group_gnome(struct pom_state* state);
-GtkActionGroup* pom_make_action_group(struct pom_state* state);
 
 G_END_DECLS
 

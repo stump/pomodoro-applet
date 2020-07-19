@@ -22,6 +22,26 @@
 
 #include <string.h>
 
+static void about_wrap(GSimpleAction *action, GVariant *parameter, gpointer data)
+{
+  (void) action;
+  (void) parameter;
+  pom_about(data);
+}
+
+static const gchar* menu_xml =
+  "<section>\
+     <item>\
+       <attribute name=\"label\" translatable=\"yes\">_About</attribute>\
+       <attribute name=\"action\">pomodoro.about</attribute>\
+     </item>\
+   </section>"
+;
+
+static const GActionEntry menu_actions[] = {
+  {"about", about_wrap, NULL, NULL, NULL, NULL},
+};
+
 static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpointer data)
 {
   struct pom_state* state;
@@ -34,8 +54,9 @@ static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpoi
   state = pom_common_fill(GTK_BIN(applet));
 
   /* Set up the action group and menu. */
-  action_group = pom_make_action_group_gnome(state);
-  panel_applet_setup_menu(applet, pom_menu_xml_gnome, action_group, GETTEXT_PACKAGE);
+  action_group = g_simple_action_group_new();
+  g_action_map_add_action_entries(G_ACTION_MAP(action_group), menu_actions, G_N_ELEMENTS(menu_actions), state);
+  panel_applet_setup_menu(applet, menu_xml, action_group, GETTEXT_PACKAGE);
   gtk_widget_insert_action_group(GTK_WIDGET(applet), "pomodoro", G_ACTION_GROUP(action_group));
   g_object_unref(action_group);
   panel_applet_set_flags(applet, PANEL_APPLET_EXPAND_MINOR);

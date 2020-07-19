@@ -141,16 +141,13 @@ static gboolean pom_button_pressed(GtkWidget* ebox, GdkEventButton* event, struc
   return FALSE;
 }
 
-static void pom_about(GtkAction* action, gpointer data)
+void pom_about(struct pom_state* state)
 {
   const gchar* authors[] = {"John Stumpo",
                             "Jos\xc3\xa9 Luis Segura Lucas (MATE support)",
                             NULL};
   const gchar* artists[] = {"J\xc3\xa1nos Horv\xc3\xa1th (icon)", NULL};
-  GdkPixbuf* logo = rsvg_handle_get_pixbuf(((struct pom_state*)data)->tomato_svg);
-
-  (void) action;
-  (void) data;
+  GdkPixbuf* logo = rsvg_handle_get_pixbuf(state->tomato_svg);
 
   gtk_show_about_dialog(NULL,
     "authors", authors,
@@ -165,34 +162,6 @@ static void pom_about(GtkAction* action, gpointer data)
 
   g_object_unref(G_OBJECT(logo));
 }
-
-static void pom_about_gnome(GSimpleAction *action, GVariant *parameter, gpointer data)
-{
-  (void) action;
-  (void) parameter;
-  pom_about(NULL, data);
-}
-
-const gchar* pom_menu_xml_gnome =
-  "<section>\
-     <item>\
-       <attribute name=\"label\" translatable=\"yes\">_About</attribute>\
-       <attribute name=\"action\">pomodoro.about</attribute>\
-     </item>\
-   </section>"
-;
-
-static const GActionEntry menu_actions_gnome[] = {
-  {"about", pom_about_gnome, NULL, NULL, NULL, NULL},
-};
-
-const gchar* pom_menu_xml =
-  "<menuitem name=\"About\" action=\"About\" />"
-;
-
-static const GtkActionEntry menu_actions[] = {
-  {"About", GTK_STOCK_ABOUT, N_("_About"), NULL, NULL, G_CALLBACK(pom_about)},
-};
 
 struct pom_state* pom_common_fill(GtkBin* applet)
 {
@@ -249,19 +218,4 @@ struct pom_state* pom_common_fill(GtkBin* applet)
   state->timer = g_timer_new();
 
   return state;
-}
-
-GSimpleActionGroup* pom_make_action_group_gnome(struct pom_state* state)
-{
-  GSimpleActionGroup* action_group = g_simple_action_group_new();
-  g_action_map_add_action_entries(G_ACTION_MAP(action_group), menu_actions_gnome, G_N_ELEMENTS(menu_actions), state);
-  return action_group;
-}
-
-GtkActionGroup* pom_make_action_group(struct pom_state* state)
-{
-  GtkActionGroup* action_group = action_group = gtk_action_group_new("Pomodoro Applet Actions");
-  gtk_action_group_set_translation_domain(action_group, GETTEXT_PACKAGE);
-  gtk_action_group_add_actions(action_group, menu_actions, G_N_ELEMENTS(menu_actions), state);
-  return action_group;
 }
