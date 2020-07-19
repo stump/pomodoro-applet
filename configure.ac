@@ -107,19 +107,20 @@ AS_AC_EXPAND([APPLETDIR], ["${libdir}/pomodoro-applet"])
 AC_SUBST([APPLETDIR])
 AS_IF([test x"$have_gnome" = x"yes"], [
   AC_MSG_CHECKING([where panel-applet files go])
-  AS_AC_EXPAND([PANELAPPLETDIR], ["`${PKG_CONFIG} --variable=libpanel_applet_dir libpanel-applet`"])
+  PKG_CHECK_VAR([PANELAPPLETDIR], [libpanel-applet], [libpanel_applet_dir])
   AC_SUBST([PANELAPPLETDIR])
   AC_MSG_RESULT([$PANELAPPLETDIR])
 ])
 AS_IF([test x"$have_mate" = x"yes"], [
   AC_MSG_CHECKING([where mate-panel-applet files go])
   # mate-panel doesn't provide this in its .pc file, so we have to just assume...
-  AS_AC_EXPAND([MATEPANELAPPLETDIR], ["`${PKG_CONFIG} --variable=prefix libmatepanelapplet-4.0`/share/mate-panel/applets"])
+  PKG_CHECK_VAR([MATEPANELPREFIX], [libmatepanelapplet-4.0], [prefix])
+  AS_AC_EXPAND([MATEPANELAPPLETDIR], ["${MATEPANELPREFIX}/share/mate-panel/applets"])
   AC_SUBST([MATEPANELAPPLETDIR])
   AC_MSG_RESULT([$MATEPANELAPPLETDIR])
 ])
 AC_MSG_CHECKING([where dbus service files go])
-AS_AC_EXPAND([SERVICEDIR], ["`${PKG_CONFIG} --variable=session_bus_services_dir dbus-1`"])
+PKG_CHECK_VAR([SERVICEDIR], [dbus-1], [session_bus_services_dir])
 AC_SUBST([SERVICEDIR])
 AC_MSG_RESULT([$SERVICEDIR])
 
