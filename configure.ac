@@ -75,6 +75,10 @@ AS_IF([test x"$have_mate" = x"no"], [
 ])
 AM_CONDITIONAL([HAVE_MATE], [test x"$have_mate" = x"yes"])
 
+AS_IF([test x"$have_gnome$have_mate" = x"nono"], [
+  AC_MSG_ERROR([Neither GNOME nor MATE applets will be built; no point in continuing])
+])
+
 PKG_CHECK_MODULES([LIBNOTIFY], [libnotify >= 0.7])
 AC_SUBST([LIBNOTIFY_CFLAGS])
 AC_SUBST([LIBNOTIFY_LIBS])
