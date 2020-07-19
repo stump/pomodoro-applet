@@ -32,6 +32,7 @@ pixmap_DATA = pomodoro.svg
 if HAVE_GNOME
 libpomodoro_applet_la_SOURCES = applet-common.c applet-common.h applet-gnome.c
 libpomodoro_applet_la_CPPFLAGS = @LIBPANELAPPLET_CFLAGS@ @LIBNOTIFY_CFLAGS@ @LIBCANBERRA_GTK_CFLAGS@ @LIBRSVG_CFLAGS@ -DPKGDATADIR='"$(pkgdatadir)"' -DPIXMAPDIR='"$(pixmapdir)"' -DGNOMELOCALEDIR='"$(localedir)"'
+libpomodoro_applet_la_LDFLAGS = -shared -module -avoid-version -export-dynamic
 libpomodoro_applet_la_LIBADD = @LIBPANELAPPLET_LIBS@ @LIBNOTIFY_LIBS@ @LIBCANBERRA_GTK_LIBS@ @LIBRSVG_LIBS@
 
 panelappletdir = $(PANELAPPLETDIR)
