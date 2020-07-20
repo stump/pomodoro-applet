@@ -40,7 +40,7 @@ static const gchar* menu_xml =
 ;
 
 static const GActionEntry menu_actions[] = {
-  {"about", about_wrap, NULL, NULL, NULL, NULL},
+  {"about", about_wrap, NULL, NULL, NULL, {0}},
 };
 
 static gboolean pomodoro_applet_fill(PanelApplet* applet, const gchar* iid, gpointer data)
