@@ -20,7 +20,7 @@
 #include <libnotify/notify.h>
 #include <canberra-gtk.h>
 #include <librsvg/rsvg.h>
-#include <glib/gi18n.h>
+#include <glib/gi18n-lib.h>
 
 #define WORK_SECONDS 25*60
 #define BREAK_SECONDS 5*60
