@@ -1,6 +1,7 @@
 [Applet Factory]
 Id=PomodoroAppletFactory
-Location=@APPLETDIR@/pomodoro-applet-mate
+InProcess=@MATE_IN_PROCESS@
+Location=@APPLETDIR@/pomodoro-applet-mate@MATE_BINARY_SUFFIX@
 Name=Pomodoro Applet Factory
 Description=Pomodoro Applet factory
 

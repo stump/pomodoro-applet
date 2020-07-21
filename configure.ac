@@ -119,10 +119,25 @@ AS_IF([test x"$have_mate" = x"yes"], [
   AC_SUBST([MATEPANELAPPLETDIR])
   AC_MSG_RESULT([$MATEPANELAPPLETDIR])
 ])
-AC_MSG_CHECKING([where dbus service files go])
-PKG_CHECK_VAR([SERVICEDIR], [dbus-1], [session_bus_services_dir])
-AC_SUBST([SERVICEDIR])
-AC_MSG_RESULT([$SERVICEDIR])
+
+# Let the MATE applet optionally be built to run in-process.
+AC_ARG_ENABLE([mate-in-process], AS_HELP_STRING([--enable-mate-in-process],
+  [build the MATE panel applet to run in-process]))
+AS_IF([test x"$enable_mate_in_process" = x"yes"], [
+  MATE_IN_PROCESS=true
+  MATE_BINARY_SUFFIX=.so
+], [
+  MATE_IN_PROCESS=false
+  MATE_BINARY_SUFFIX=
+  # We only need to know this if we're building an out-of-process MATE applet.
+  AC_MSG_CHECKING([where dbus service files go])
+  PKG_CHECK_VAR([SERVICEDIR], [dbus-1], [session_bus_services_dir])
+  AC_SUBST([SERVICEDIR])
+  AC_MSG_RESULT([$SERVICEDIR])
+])
+AC_SUBST([MATE_IN_PROCESS])
+AC_SUBST([MATE_BINARY_SUFFIX])
+AM_CONDITIONAL([BUILD_MATE_IN_PROCESS], [test x"$MATE_IN_PROCESS" = x"true"])
 
 AC_CONFIG_FILES([Makefile
                  po/Makefile.in

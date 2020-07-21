@@ -19,7 +19,7 @@
 #include "applet-common.h"
 
 #include <mate-panel-applet.h>
-#include <glib/gi18n.h>
+#include <glib/gi18n-lib.h>
 
 #include <string.h>
 
@@ -64,4 +64,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   return TRUE;
 }
 
+#ifdef BUILD_MATE_IN_PROCESS
+MATE_PANEL_APPLET_IN_PROCESS_FACTORY("PomodoroAppletFactory", PANEL_TYPE_APPLET, "", pomodoro_applet_fill, NULL);
+#else
 MATE_PANEL_APPLET_OUT_PROCESS_FACTORY("PomodoroAppletFactory", PANEL_TYPE_APPLET, "", pomodoro_applet_fill, NULL);
+#endif

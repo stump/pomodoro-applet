@@ -22,9 +22,6 @@ applet_PROGRAMS =
 if HAVE_GNOME
 applet_LTLIBRARIES += pomodoro-applet-gnome.la
 endif
-if HAVE_MATE
-applet_PROGRAMS += pomodoro-applet-mate
-endif
 
 pixmapdir = $(datadir)/pixmaps
 pixmap_DATA = pomodoro.svg
@@ -40,9 +37,24 @@ panelapplet_DATA = io.stump.PomodoroApplet.panel-applet
 endif
 
 if HAVE_MATE
+
+if BUILD_MATE_IN_PROCESS
+applet_LTLIBRARIES += pomodoro-applet-mate.la
+
+pomodoro_applet_mate_la_SOURCES = applet-common.c applet-common.h applet-mate.c
+pomodoro_applet_mate_la_CPPFLAGS = @LIBMATEPANELAPPLET_CFLAGS@ @LIBNOTIFY_CFLAGS@ @LIBCANBERRA_GTK_CFLAGS@ @LIBRSVG_CFLAGS@ -DPKGDATADIR='"$(pkgdatadir)"' -DPIXMAPDIR='"$(pixmapdir)"' -DMATELOCALEDIR='"$(localedir)"' -DBUILD_MATE_IN_PROCESS
+pomodoro_applet_mate_la_LDFLAGS = -shared -module -avoid-version -export-dynamic
+pomodoro_applet_mate_la_LIBADD = @LIBMATEPANELAPPLET_LIBS@ @LIBNOTIFY_LIBS@ @LIBCANBERRA_GTK_LIBS@ @LIBRSVG_LIBS@
+else
+applet_PROGRAMS += pomodoro-applet-mate
+
 pomodoro_applet_mate_SOURCES = applet-common.c applet-common.h applet-mate.c
 pomodoro_applet_mate_CPPFLAGS = @LIBMATEPANELAPPLET_CFLAGS@ @LIBNOTIFY_CFLAGS@ @LIBCANBERRA_GTK_CFLAGS@ @LIBRSVG_CFLAGS@ -DPKGDATADIR='"$(pkgdatadir)"' -DPIXMAPDIR='"$(pixmapdir)"' -DMATELOCALEDIR='"$(localedir)"'
 pomodoro_applet_mate_LDADD = @LIBMATEPANELAPPLET_LIBS@ @LIBNOTIFY_LIBS@ @LIBCANBERRA_GTK_LIBS@ @LIBRSVG_LIBS@
+
+servicedir = $(SERVICEDIR)
+service_DATA = org.mate.panel.applet.PomodoroAppletFactory.service
+endif
 
 matepanelappletdir = $(MATEPANELAPPLETDIR)
 matepanelapplet_DATA = io.stump.PomodoroApplet.mate-panel-applet
@@ -52,12 +64,6 @@ endif
 # included in intltool itself soon enough...
 %.panel-applet:   %.panel-applet.in   $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; $(INTLTOOL_V_MERGE)LC_ALL=C $(INTLTOOL_MERGE) $(INTLTOOL_V_MERGE_OPTIONS) -d -u -c $(top_builddir)/po/.intltool-merge-cache $(top_srcdir)/po $< $@
 %.mate-panel-applet:   %.mate-panel-applet.in   $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; $(INTLTOOL_V_MERGE)LC_ALL=C $(INTLTOOL_MERGE) $(INTLTOOL_V_MERGE_OPTIONS) -d -u -c $(top_builddir)/po/.intltool-merge-cache $(top_srcdir)/po $< $@
-
-servicedir = $(SERVICEDIR)
-service_DATA =
-if HAVE_MATE
-service_DATA += org.mate.panel.applet.PomodoroAppletFactory.service
-endif
 
 pkgdata_DATA = timerexpired.ogg
 
