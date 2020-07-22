@@ -28,6 +28,8 @@ LT_INIT([dlopen disable-static])
 AC_PROG_CC
 AM_PROG_CC_C_O
 CFLAGS="$CFLAGS -W -Wall"
+gl_VISIBILITY
+CFLAGS="$CFLAGS $CFLAG_VISIBILITY"
 
 # Checks for libraries.
 AC_ARG_WITH([gnome], AS_HELP_STRING([--without-gnome],
