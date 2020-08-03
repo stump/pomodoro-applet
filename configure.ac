@@ -148,3 +148,20 @@ AC_CONFIG_FILES([Makefile
                  src/io.stump.PomodoroApplet.mate-panel-applet.in
                  src/org.mate.panel.applet.PomodoroAppletFactory.service])
 AC_OUTPUT
+
+AS_ECHO_N(["
+        To be built
+        ===========
+
+        GNOME applet:      $have_gnome
+        MATE applet:       $have_mate"])
+
+AS_IF([test x"$have_mate" = x"yes"], [
+  AS_IF([test x"$MATE_IN_PROCESS" = x"true"], [
+    AS_ECHO_N([', to run in-process'])
+  ], [
+    AS_ECHO_N([', to run out-of-process'])
+  ])
+])
+AS_ECHO(["
+"])
