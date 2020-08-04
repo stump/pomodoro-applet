@@ -37,15 +37,38 @@ AC_ARG_WITH([gnome], AS_HELP_STRING([--without-gnome],
    is autodetect; alternatively, pass --with-gnome to refuse to build without
    GNOME support)]))
 AS_IF([test x"$with_gnome" != x"no"], [
-  PKG_CHECK_MODULES([LIBPANELAPPLET], [libpanel-applet], [
-    have_gnome=yes
-    AC_SUBST([LIBPANELAPPLET_CFLAGS])
-    AC_SUBST([LIBPANELAPPLET_LIBS])
+  AC_ARG_WITH([libgnome-panel], AS_HELP_STRING([--without-libgnome-panel],
+    [ignore presence of libgnome-panel and only look for libpanel-applet to use
+     for GNOME support (default is to prefer libgnome-panel and fall back to
+     libpanel-applet; alternatively, pass --with-libgnome-panel to refuse to
+     build a libpanel-applet based GNOME applet)]))
+  AS_IF([test x"$with_libgnome_panel" != x"no"], [
+    PKG_CHECK_MODULES([LIBGNOMEPANEL], [libgnome-panel], [
+      have_gnome=yes
+      have_libgnome_panel=yes
+      AC_SUBST([LIBGNOMEPANEL_CFLAGS])
+      AC_SUBST([LIBGNOMEPANEL_LIBS])
+    ], [
+      have_libgnome_panel=no
+    ])
   ], [
-    have_gnome=no
+    have_libgnome_panel=no
+  ])
+  AS_IF([test x"$have_libgnome_panel" = x"no"], [
+    AS_IF([test x"$with_libgnome_panel" = x"yes"], [
+      AC_MSG_ERROR([libgnome-panel not found but support was explicitly requested])
+    ])
+    PKG_CHECK_MODULES([LIBPANELAPPLET], [libpanel-applet], [
+      have_gnome=yes
+      AC_SUBST([LIBPANELAPPLET_CFLAGS])
+      AC_SUBST([LIBPANELAPPLET_LIBS])
+    ], [
+      have_gnome=no
+    ])
   ])
 ], [
   have_gnome=no
+  have_libgnome_panel=no
 ])
 AS_IF([test x"$have_gnome" = x"no"], [
   AS_IF([test x"$with_gnome" = x"yes"], [
@@ -53,6 +76,7 @@ AS_IF([test x"$have_gnome" = x"no"], [
   ])
 ])
 AM_CONDITIONAL([HAVE_GNOME], [test x"$have_gnome" = x"yes"])
+AM_CONDITIONAL([HAVE_LIBGNOMEPANEL], [test x"$have_libgnome_panel" = x"yes"])
 
 AC_ARG_WITH([mate], AS_HELP_STRING([--without-mate],
   [ignore presence of MATE libraries and do not build MATE support (default
@@ -108,10 +132,17 @@ AC_CHECK_HEADERS([string.h])
 AS_AC_EXPAND([APPLETDIR], ["${libdir}/pomodoro-applet"])
 AC_SUBST([APPLETDIR])
 AS_IF([test x"$have_gnome" = x"yes"], [
-  AC_MSG_CHECKING([where panel-applet files go])
-  PKG_CHECK_VAR([PANELAPPLETDIR], [libpanel-applet], [libpanel_applet_dir])
-  AC_SUBST([PANELAPPLETDIR])
-  AC_MSG_RESULT([$PANELAPPLETDIR])
+  AS_IF([test x"$have_libgnome_panel" = x"yes"], [
+    AC_MSG_CHECKING([where gnome-panel modules go])
+    PKG_CHECK_VAR([MODULESDIR], [libgnome-panel], [modulesdir])
+    AC_SUBST([MODULESDIR])
+    AC_MSG_RESULT([$MODULESDIR])
+  ], [
+    AC_MSG_CHECKING([where panel-applet files go])
+    PKG_CHECK_VAR([PANELAPPLETDIR], [libpanel-applet], [libpanel_applet_dir])
+    AC_SUBST([PANELAPPLETDIR])
+    AC_MSG_RESULT([$PANELAPPLETDIR])
+  ])
 ])
 AS_IF([test x"$have_mate" = x"yes"], [
   AC_MSG_CHECKING([where mate-panel-applet files go])
@@ -153,7 +184,17 @@ AS_ECHO_N(["
         To be built
         ===========
 
-        GNOME applet:      $have_gnome
+        GNOME applet:      $have_gnome"])
+
+AS_IF([test x"$have_gnome" = x"yes"], [
+  AS_IF([test x"$have_libgnome_panel" = x"yes"], [
+    AS_ECHO_N([', using libgnome-panel'])
+  ], [
+    AS_ECHO_N([', using libpanel-applet'])
+  ])
+])
+
+AS_ECHO_N(["
         MATE applet:       $have_mate"])
 
 AS_IF([test x"$have_mate" = x"yes"], [
@@ -163,5 +204,6 @@ AS_IF([test x"$have_mate" = x"yes"], [
     AS_ECHO_N([', to run out-of-process'])
   ])
 ])
+
 AS_ECHO(["
 "])
