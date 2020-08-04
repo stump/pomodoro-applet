@@ -31,12 +31,12 @@ static void about_wrap(GSimpleAction *action, GVariant *parameter, gpointer data
 }
 
 static const gchar* menu_xml =
-  "<section>\
-     <item>\
-       <attribute name=\"label\" translatable=\"yes\">_About</attribute>\
-       <attribute name=\"action\">pomodoro.about</attribute>\
-     </item>\
-   </section>"
+  "<section>"
+    "<item>"
+      "<attribute name=\"label\" translatable=\"yes\">_About</attribute>"
+      "<attribute name=\"action\">pomodoro.about</attribute>"
+    "</item>"
+  "</section>"
 ;
 
 static const GActionEntry menu_actions[] = {
