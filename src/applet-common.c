@@ -40,6 +40,7 @@ struct pom_state {
   int seconds;
   GTimer* timer;
   RsvgHandle* tomato_svg;
+  guint timeout_src_id;
 };
 
 /* Set the timer to a new state and time. */
@@ -115,7 +116,13 @@ static gboolean pom_update(gpointer data)
     }
   }
   pom_update_label(state);
-  return (state->state != POM_STOPPED);
+
+  if (state->state == POM_STOPPED) {
+    state->timeout_src_id = 0;
+    return G_SOURCE_REMOVE;
+  } else {
+    return G_SOURCE_CONTINUE;
+  }
 }
 
 static gboolean pom_button_pressed(GtkWidget* ebox, GdkEventButton* event, struct pom_state* state)
@@ -126,7 +133,7 @@ static gboolean pom_button_pressed(GtkWidget* ebox, GdkEventButton* event, struc
     switch (state->state) {
       case POM_STOPPED:
         pom_set_timer(state, POM_WORK, WORK_SECONDS);
-        g_timeout_add(100, pom_update, state);
+        state->timeout_src_id = g_timeout_add(100, pom_update, state);
         break;
       case POM_WORK:
         pom_set_timer(state, POM_BREAK, BREAK_SECONDS);
@@ -163,6 +170,27 @@ void pom_about(struct pom_state* state)
   );
 
   g_object_unref(G_OBJECT(logo));
+}
+
+static void pom_destroy(GtkWidget* applet, struct pom_state* state)
+{
+  (void) applet;
+
+  /* label is automatically cleaned up by other parts of the destruction process */
+
+  if (state->timer != NULL) {
+    g_timer_destroy(state->timer);
+    state->timer = NULL;
+  }
+
+  g_clear_object(&state->tomato_svg);
+
+  if (state->timeout_src_id != 0) {
+    g_source_remove(state->timeout_src_id);
+    state->timeout_src_id = 0;
+  }
+
+  g_free(state);
 }
 
 struct pom_state* pom_common_fill(GtkBin* applet)
@@ -218,6 +246,8 @@ struct pom_state* pom_common_fill(GtkBin* applet)
 
   gtk_box_pack_start(GTK_BOX(hbox), state->label, FALSE, FALSE, 0);
   state->timer = g_timer_new();
+
+  g_signal_connect(G_OBJECT(applet), "destroy", G_CALLBACK(pom_destroy), state);
 
   return state;
 }
