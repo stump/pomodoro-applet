@@ -129,17 +129,28 @@ AC_CHECK_HEADERS([string.h])
 # Checks for library functions.
 
 # Set some extra paths.
+# First, a little error-checking wrapper around PKG_CHECK_VAR.
+AC_DEFUN([POM_PKG_REQUIRE_VAR], [
+  PKG_CHECK_VAR([$1], [$2], [$3], [
+    $4
+  ], [
+    $5
+    AC_MSG_ERROR([could not retrieve variable $3 for pkg-config package $2])
+  ])
+])
+
+# Then, the real work.
 AS_AC_EXPAND([APPLETDIR], ["${libdir}/pomodoro-applet"])
 AC_SUBST([APPLETDIR])
 AS_IF([test x"$have_gnome" = x"yes"], [
   AS_IF([test x"$have_libgnome_panel" = x"yes"], [
     AC_MSG_CHECKING([where gnome-panel modules go])
-    PKG_CHECK_VAR([MODULESDIR], [libgnome-panel], [modulesdir])
+    POM_PKG_REQUIRE_VAR([MODULESDIR], [libgnome-panel], [modulesdir])
     AC_SUBST([MODULESDIR])
     AC_MSG_RESULT([$MODULESDIR])
   ], [
     AC_MSG_CHECKING([where panel-applet files go])
-    PKG_CHECK_VAR([PANELAPPLETDIR], [libpanel-applet], [libpanel_applet_dir])
+    POM_PKG_REQUIRE_VAR([PANELAPPLETDIR], [libpanel-applet], [libpanel_applet_dir])
     AC_SUBST([PANELAPPLETDIR])
     AC_MSG_RESULT([$PANELAPPLETDIR])
   ])
@@ -147,7 +158,7 @@ AS_IF([test x"$have_gnome" = x"yes"], [
 AS_IF([test x"$have_mate" = x"yes"], [
   AC_MSG_CHECKING([where mate-panel-applet files go])
   # mate-panel doesn't provide this in its .pc file, so we have to just assume...
-  PKG_CHECK_VAR([MATEPANELPREFIX], [libmatepanelapplet-4.0], [prefix])
+  POM_PKG_REQUIRE_VAR([MATEPANELPREFIX], [libmatepanelapplet-4.0], [prefix])
   AS_AC_EXPAND([MATEPANELAPPLETDIR], ["${MATEPANELPREFIX}/share/mate-panel/applets"])
   AC_SUBST([MATEPANELAPPLETDIR])
   AC_MSG_RESULT([$MATEPANELAPPLETDIR])
@@ -164,7 +175,7 @@ AS_IF([test x"$enable_mate_in_process" = x"yes"], [
   MATE_BINARY_SUFFIX=
   # We only need to know this if we're building an out-of-process MATE applet.
   AC_MSG_CHECKING([where dbus service files go])
-  PKG_CHECK_VAR([SERVICEDIR], [dbus-1], [session_bus_services_dir])
+  POM_PKG_REQUIRE_VAR([SERVICEDIR], [dbus-1], [session_bus_services_dir])
   AC_SUBST([SERVICEDIR])
   AC_MSG_RESULT([$SERVICEDIR])
 ])
