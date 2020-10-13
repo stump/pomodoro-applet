@@ -3,7 +3,7 @@ timer for the Pomodoro Technique (http://www.pomodorotechnique.com/). You
 will need the development files for libnotify, libcanberra-gtk, librsvg, and
 either libgnome-panel, libpanel-applet or libmate-panel-applet to build this.
 
-The main author is John Stumpo <stump@stump.io>.
+The main author is John Stumpo <projects at stump dot io>.
 
 Releases are at:
   http://ftp.stump.io/software/pomodoro-applet/
